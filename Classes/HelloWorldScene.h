@@ -27,7 +27,7 @@
 
 #include "cocos2d.h"
 
-class HelloWorld : public cocos2d::Scene
+class HelloWorld : public Scene
 {
 public:
     static cocos2d::Scene* createScene();
