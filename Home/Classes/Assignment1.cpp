@@ -31,9 +31,9 @@ bool Assignment1::init()
 void Assignment1::update(float dt)
 {
 	frameSize.x = Director::getInstance()->getVisibleOrigin().x + (character->getContentSize().width / 2);
-	frameSize.y = Director::getInstance()->getVisibleOrigin().y + (character->getContentSize().height / 3);
+	frameSize.y = Director::getInstance()->getVisibleOrigin().y + (character->getContentSize().height / 2);
 	frameEndSize.x = Director::getInstance()->getVisibleSize().width - (character->getContentSize().width / 2);
-	frameEndSize.y = Director::getInstance()->getVisibleSize().height + (character->getContentSize().height / 3);
+	frameEndSize.y = Director::getInstance()->getVisibleSize().height - (character->getContentSize().height / 2);
 
 	if (frameSize.x >= character->getPositionX() || frameEndSize.x <= character->getPositionX())
 	{
