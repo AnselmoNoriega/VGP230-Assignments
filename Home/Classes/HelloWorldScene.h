@@ -39,7 +39,15 @@ public:
     void menuCloseCallback(cocos2d::Ref* pSender);
     
     // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+    CREATE_FUNC(HelloWorld)
+
+private:
+
+    cocos2d::Sprite* character;
+    cocos2d::Vec2 origin;
+    cocos2d::Vec2 speed;
+    cocos2d::Vec2 frameSize;
+    cocos2d::Vec2 frameEndSize;
 
 };
 
