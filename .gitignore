@@ -17,4 +17,5 @@ launchSettings.json
 xcuserdata
 *.ipch
 packages/
+!proj.win32/bin
 proj.win32/
