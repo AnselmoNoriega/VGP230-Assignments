@@ -27,6 +27,11 @@ bool Assignment1::init()
 	CreateCharacters(1, "carrot.png", midlePos, { 200, 250 });
 	CreateCharacters(2, "carrier.png", midlePos, { -100, 50 });
 
+	for (size_t i = 0; i < MAXCHARACTERS; i++)
+	{
+		SetFrameValues(i);
+	}
+
 	this->scheduleUpdate();
 
 	return true;
@@ -34,9 +39,10 @@ bool Assignment1::init()
 
 void Assignment1::update(float dt)
 {
-	CharacterMovemnt(0, dt);
-	CharacterMovemnt(1, dt);
-	CharacterMovemnt(2, dt);
+	for (size_t i = 0; i < MAXCHARACTERS; i++)
+	{
+		CharacterMovemnt(i, dt);
+	}
 }
 
 
@@ -55,11 +61,6 @@ void Assignment1::CreateCharacters(int characterIndex, std::string fileName, Vec
 
 void Assignment1::CharacterMovemnt(int characterIndex, float deltaTime)
 {
-	frameSize[characterIndex].x = origin.x + (character[characterIndex]->getContentSize().width / 2);
-	frameSize[characterIndex].y = origin.y + (character[characterIndex]->getContentSize().height / 2);
-	frameEndSize[characterIndex].x = ScreenSize.width - (character[characterIndex]->getContentSize().width / 2);
-	frameEndSize[characterIndex].y = ScreenSize.height - (character[characterIndex]->getContentSize().height / 2);
-
 	if (FrameSizeX(characterIndex))
 	{
 		mSpeed[characterIndex].x *= (-1);
@@ -72,6 +73,14 @@ void Assignment1::CharacterMovemnt(int characterIndex, float deltaTime)
 
 	character[characterIndex]->setPosition(character[characterIndex]->getPositionX() + mSpeed[characterIndex].x * deltaTime, 
 		                                   character[characterIndex]->getPositionY() + mSpeed[characterIndex].y * deltaTime);
+}
+
+void Assignment1::SetFrameValues(int characterIndex)
+{
+	frameSize[characterIndex].x = origin.x + (character[characterIndex]->getContentSize().width / 2);
+	frameSize[characterIndex].y = origin.y + (character[characterIndex]->getContentSize().height / 2);
+	frameEndSize[characterIndex].x = ScreenSize.width - (character[characterIndex]->getContentSize().width / 2);
+	frameEndSize[characterIndex].y = ScreenSize.height - (character[characterIndex]->getContentSize().height / 2);
 }
 
 bool Assignment1::FrameSizeX(int characterIndex)

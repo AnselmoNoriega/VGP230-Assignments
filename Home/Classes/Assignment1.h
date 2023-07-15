@@ -27,6 +27,7 @@ private:
 
 	void CreateCharacters(int characterIndex, std::string fileName, cocos2d::Vec2 pos, cocos2d::Vec2 speed);
 	void CharacterMovemnt(int characterIndex, float deltaTime);
+	void SetFrameValues(int characterIndex);
 	bool FrameSizeX(int characterIndex);
 	bool FrameSizeY(int characterIndex);
 };
