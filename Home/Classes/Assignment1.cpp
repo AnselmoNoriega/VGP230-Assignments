@@ -27,7 +27,7 @@ bool Assignment1::init()
 	CreateCharacters(1, "carrot.png", midlePos, { 200, 250 });
 	CreateCharacters(2, "carrier.png", midlePos, { -100, 50 });
 
-	for (size_t i = 0; i < MAXCHARACTERS; i++)
+	for (size_t i = 0; i < MAX; i++)
 	{
 		SetFrameValues(i);
 	}
@@ -39,7 +39,7 @@ bool Assignment1::init()
 
 void Assignment1::update(float dt)
 {
-	for (size_t i = 0; i < MAXCHARACTERS; i++)
+	for (size_t i = 0; i < MAX; i++)
 	{
 		CharacterMovemnt(i, dt);
 	}
