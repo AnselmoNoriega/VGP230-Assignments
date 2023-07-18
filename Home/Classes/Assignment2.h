@@ -17,8 +17,16 @@ public:
 
 private:
 
-	cocos2d::Sprite* character;
-	cocos2d::Vec2 origin;
-	cocos2d::Vec2 speed;
+	cocos2d::Vec2 _origin; 
+	cocos2d::Size _screenPos;
+
+	cocos2d::Sprite* _character;
+	cocos2d::Vec2 _speed;
+
+	cocos2d::EventListenerKeyboard* _keyboardListener;
+
+	void CreateCharacter(std::string filePath, cocos2d::Vec2 pos, cocos2d::Vec2 speed);
+	void KeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	void EnableKeyboard();
 };
 
