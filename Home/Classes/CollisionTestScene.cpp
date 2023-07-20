@@ -210,29 +210,44 @@ void CollisionTestScene::update(float dt)
 /// Point to AABB
 bool CollisionComponent::checkCollision(const Vec2& p, const AABB& b)
 {
-	/// TODO: ADD CODE Here
-	return false;
+	if (p.x < b._x || p.x > b._x + b._width)
+	{
+		return false;
+	}
+	if (p.y > b._y + b._height || p.y < b._y)
+	{
+		return false;
+	}
+	return true;
 }
 
 /// Point to Circle
 bool CollisionComponent::checkCollision(const Vec2& p, const Vec2& c, float r)
 {
-	/// TODO: ADD CODE Here
-	return false;
+	auto dSqur = ((p.x - c.x) * (p.x - c.x)) + ((p.y - c.y) * (p.y - c.y));
+	return dSqur <= ((r) * (r));
 }
 
 /// AABB to AABB
 bool CollisionComponent::checkCollision(const AABB& b1, const AABB& b2)
 {
-	/// TODO: ADD CODE Here
-	return false;
+	if (b1._x + b1._width < b2._x || b2._x + b2._width < b1._x)
+	{
+		return false;
+	}
+	if (b1._y + b1._height < b2._y || b2._y + b2._height < b1._y)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 /// Circle to Circle
 bool CollisionComponent::checkCollision(const Vec2& c1, float r1, const Vec2& c2, float r2)
 {
-	/// TODO: ADD CODE Here
-	return false;
+	auto dSqur = ((c1.x - c2.x) * (c1.x - c2.x)) + ((c1.y - c2.y) * (c1.y - c2.y));
+	return dSqur <= ((r1 + r2) * (r1 + r2));
 }
 
 /// Circle to AABB

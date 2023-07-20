@@ -67,6 +67,9 @@ void Assignment2::InstantiateBulletPool()
 		this->addChild(_bullets[i]->sprite.first, 0);
 		this->addChild(_bullets[i]->sprite.second, 0);
 
+		_character->addChild(_bullets[i]->sprite.first);
+		_character->addChild(_bullets[i]->sprite.second);
+		
 		//disables the objects
 	}
 }
@@ -131,10 +134,6 @@ void Assignment2::KeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::
 
 	case EventKeyboard::KeyCode::KEY_S:
 		_isKeySPressed = false;
-		break;
-
-	case EventKeyboard::KeyCode::KEY_SPACE:
-		//enables the shot
 		break;
 	}
 }
