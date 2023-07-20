@@ -36,7 +36,7 @@ bool Assignment2::init()
 
 void Assignment2::update(float dt)
 {
-
+	CharacterMovement(dt);
 }
 
 
@@ -59,13 +59,31 @@ void Assignment2::InstantiateBulletPool()
 {
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
-		_bullets[i] = new Bullet("bullet1.png", Vec2(18, 20));
+		_bullets[i] = new Bullet("bullet1.png", { _character->getPosition().x + 18, _character->getPosition().y + 20 });
 
 		_bullets[i]->sprite.first->setPosition(_bullets[i]->launchingPos.first);
 		_bullets[i]->sprite.second->setPosition(_bullets[i]->launchingPos.second);
 
-		this->addChild(_bullets[i], 0);
+		this->addChild(_bullets[i]->sprite.first, 0);
+		this->addChild(_bullets[i]->sprite.second, 0);
+
 		//disables the objects
+	}
+}
+
+void Assignment2::CharacterMovement(float dt)
+{
+	if (_isKeyAPressed)
+	{
+		_character->setRotation(_character->getRotation() - 20 * dt);
+	}
+	if (_isKeyDPressed)
+	{
+		_character->setRotation(_character->getRotation() + 20 * dt);
+	}
+	if (_isKeyWPressed && !_isKeySPressed)
+	{
+		
 	}
 }
 
@@ -74,23 +92,19 @@ void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	switch (keyCode)
 	{
 	case EventKeyboard::KeyCode::KEY_A:
-		_character->setPosition(_character->getPositionX() + (_speed.x * (-1)), _character->getPositionY());
-		_character->setRotation(-90);
+		_isKeyAPressed = true;
 		break;
 
 	case EventKeyboard::KeyCode::KEY_D:
-		_character->setPosition(_character->getPositionX() + _speed.x, _character->getPositionY());
-		_character->setRotation(90);
+		_isKeyDPressed = true;
 		break;
 
 	case EventKeyboard::KeyCode::KEY_W:
-		_character->setPosition(_character->getPositionX(), _character->getPositionY() + _speed.y);
-		_character->setRotation(0);
+		_isKeyWPressed = true;
 		break;
 
 	case EventKeyboard::KeyCode::KEY_S:
-		_character->setPosition(_character->getPositionX(), _character->getPositionY() + (_speed.y * (-1)));
-		_character->setRotation(180);
+		_isKeySPressed = true;
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
@@ -99,11 +113,37 @@ void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	}
 }
 
+void Assignment2::KeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
+{
+	switch (keyCode)
+	{
+	case EventKeyboard::KeyCode::KEY_A:
+		_isKeyAPressed = false;
+		break;
+
+	case EventKeyboard::KeyCode::KEY_D:
+		_isKeyDPressed = false;
+		break;
+
+	case EventKeyboard::KeyCode::KEY_W:
+		_isKeyWPressed = false;
+		break;
+
+	case EventKeyboard::KeyCode::KEY_S:
+		_isKeySPressed = false;
+		break;
+
+	case EventKeyboard::KeyCode::KEY_SPACE:
+		//enables the shot
+		break;
+	}
+}
 
 void Assignment2::EnableKeyboard()
 {
 	_keyboardListener = EventListenerKeyboard::create();
 	_keyboardListener->onKeyPressed = CC_CALLBACK_2(Assignment2::KeyPressed, this);
+	_keyboardListener->onKeyReleased = CC_CALLBACK_2(Assignment2::KeyReleased, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(_keyboardListener, this);
 }
 
