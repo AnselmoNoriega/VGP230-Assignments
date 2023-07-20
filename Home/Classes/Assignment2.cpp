@@ -64,8 +64,8 @@ void Assignment2::InstantiateBulletPool()
 		_bullets[i]->sprite.first->setPosition(_bullets[i]->launchingPos.first);
 		_bullets[i]->sprite.second->setPosition(_bullets[i]->launchingPos.second);
 
-
 		this->addChild(_bullets[i], 0);
+		//disables the objects
 	}
 }
 
@@ -94,8 +94,7 @@ void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
-		_character->setPosition(_character->getPositionX(), _character->getPositionY() + (_speed.y * (-1)));
-		_character->setRotation(180);
+		//enables the shot
 		break;
 	}
 }
