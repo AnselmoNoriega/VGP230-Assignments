@@ -51,6 +51,22 @@ void Assignment2::CreateCharacter(std::string filePath, cocos2d::Vec2 pos, cocos
 	_character->setPosition(pos);
 	_speed = speed;
 	this->addChild(_character, 0);
+
+	InstantiateBulletPool();
+}
+
+void Assignment2::InstantiateBulletPool()
+{
+	for (size_t i = 0; i < MAXBULLETS; i++)
+	{
+		_bullets[i] = new Bullet("bullet1.png", Vec2(18, 20));
+
+		_bullets[i]->sprite.first->setPosition(_bullets[i]->launchingPos.first);
+		_bullets[i]->sprite.second->setPosition(_bullets[i]->launchingPos.second);
+
+
+		this->addChild(_bullets[i], 0);
+	}
 }
 
 void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
@@ -58,7 +74,7 @@ void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	switch (keyCode)
 	{
 	case EventKeyboard::KeyCode::KEY_A:
-		_character->setPosition(_character->getPositionX() + (_speed.x * (- 1)), _character->getPositionY());
+		_character->setPosition(_character->getPositionX() + (_speed.x * (-1)), _character->getPositionY());
 		_character->setRotation(-90);
 		break;
 
@@ -76,8 +92,14 @@ void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		_character->setPosition(_character->getPositionX(), _character->getPositionY() + (_speed.y * (-1)));
 		_character->setRotation(180);
 		break;
+
+	case EventKeyboard::KeyCode::KEY_SPACE:
+		_character->setPosition(_character->getPositionX(), _character->getPositionY() + (_speed.y * (-1)));
+		_character->setRotation(180);
+		break;
 	}
 }
+
 
 void Assignment2::EnableKeyboard()
 {
