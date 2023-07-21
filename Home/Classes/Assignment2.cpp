@@ -37,6 +37,7 @@ bool Assignment2::init()
 void Assignment2::update(float dt)
 {
 	CharacterMovement(dt);
+	HealthBarPos();
 
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
@@ -59,8 +60,15 @@ void Assignment2::CreateCharacter(std::string filePath, cocos2d::Vec2 pos, float
 {
 	_character = Sprite::create(filePath);
 	_character->setPosition(pos);
+
+	_healthBar = Sprite::create("bar_red.png");
+	_healthBar->setScale(0.5f);
+
 	_speed = speed;
+
 	this->addChild(_character, 0);
+	this->addChild(_healthBar, 0);
+
 	bulletIndex = 0;
 
 	InstantiateBulletPool();
@@ -102,7 +110,7 @@ void Assignment2::CharacterMovement(float dt)
 
 void Assignment2::BulletMovment(int index)
 {
-	if (_bullets[index]->sprite.first->getPositionX() < _origin.x || _bullets[index]->sprite.first->getPositionY() < _origin.y||
+	if (_bullets[index]->sprite.first->getPositionX() < _origin.x || _bullets[index]->sprite.first->getPositionY() < _origin.y ||
 		_bullets[index]->sprite.first->getPositionX() > _screenPos.width || _bullets[index]->sprite.first->getPositionY() > _screenPos.height)
 	{
 		_bullets[index]->sprite.first->setVisible(false);
@@ -143,6 +151,12 @@ void Assignment2::SetBulletToLaunch()
 
 	++bulletIndex;
 	if (bulletIndex >= MAXBULLETS) bulletIndex = 0;
+}
+
+void Assignment2::HealthBarPos()
+{
+	_healthBar->setPositionY(_character->getPositionY() + _character->getContentSize().height);
+	_healthBar->setPositionX(_character->getPositionX());
 }
 
 //----------------------Checks---------------------------------------------------------------------

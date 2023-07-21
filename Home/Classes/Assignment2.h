@@ -28,6 +28,7 @@ private:
 	cocos2d::Size _screenPos;
 
 	cocos2d::Sprite* _character;
+	cocos2d::Sprite* _healthBar;
 	Bullet* _bullets[MAXBULLETS];
 	float _speed;
 	int bulletIndex;
@@ -41,6 +42,7 @@ private:
 
 	void CreateCharacter(std::string filePath, cocos2d::Vec2 pos, float speed);
 	void CharacterMovement(float dt);
+	void HealthBarPos();
 
 	void KeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	void KeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
