@@ -3,6 +3,7 @@
 #include <math.h>
 
 #define MAXBULLETS 5
+#define BULLETSPEED 20
 using namespace cocos2d;
 
 class Bullet;
@@ -27,8 +28,10 @@ private:
 	cocos2d::Size _screenPos;
 
 	cocos2d::Sprite* _character;
-	cocos2d::Vec2 _speed;
 	Bullet* _bullets[MAXBULLETS];
+	float _speed;
+	int bulletIndex;
+
 	bool _isKeyAPressed;
 	bool _isKeyDPressed;
 	bool _isKeyWPressed;
@@ -36,13 +39,17 @@ private:
 
 	cocos2d::EventListenerKeyboard* _keyboardListener;
 
-	void CreateCharacter(std::string filePath, cocos2d::Vec2 pos, cocos2d::Vec2 speed);
+	void CreateCharacter(std::string filePath, cocos2d::Vec2 pos, float speed);
+	void CharacterMovement(float dt);
+
 	void KeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	void KeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-	void BulletMovment();
-	void CharacterMovement(float dt);
-	void InstantiateBulletPool();
 	void EnableKeyboard();
+
+	void BulletMovment(int index);
+	void SetBulletToLaunch();
+	void CheckBulletAvailability();
+	void InstantiateBulletPool();
 };
 
 
