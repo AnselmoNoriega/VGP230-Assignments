@@ -64,9 +64,6 @@ void Assignment2::InstantiateBulletPool()
 	{
 		_bullets[i] = new Bullet("bullet1.png", { 18, 22 });
 
-		_bullets[i]->sprite.first->setPosition(_bullets[i]->launchingPos.first);
-		_bullets[i]->sprite.second->setPosition(_bullets[i]->launchingPos.second);
-
 		this->addChild(_bullets[i]->sprite.first);
 		this->addChild(_bullets[i]->sprite.second);
 
@@ -99,20 +96,25 @@ void Assignment2::BulletMovment()
 {
 	if (_bullets[0]->sprite.first->isVisible())
 	{
-		Vec2 rotation1 = { cos(_character->getRotation() * (float)(M_PI / 180)), sin(_character->getRotation() * (float)(M_PI / 180)) };
-		Vec2 bulletRotation1 = { _bullets[0]->launchingPos.first.x * rotation1.y, _bullets[0]->launchingPos.first.y * rotation1.x };
-		Vec2 bulletRotation2 = { _bullets[0]->launchingPos.second.x * rotation1.y, _bullets[0]->launchingPos.second.y * rotation1.x };
+		//--------------------------FirstBullet init---------------------------------------
+		auto cosValues = _bullets[0]->launchingPos.first * cos(-_character->getRotation() * (M_PI / 180));
+		auto sinValues = _bullets[0]->launchingPos.first * sin(-_character->getRotation() * (M_PI / 180));
 
-		auto initPos1 = _character->getPosition() + bulletRotation1;
-		auto initPos2 = _character->getPosition() + bulletRotation2;
+		auto initPos1 = _character->getPositionX() + cosValues.x - sinValues.y;
+		auto initPos2 = _character->getPositionY() + sinValues.x + cosValues.y;
 
-		_bullets[0]->sprite.first->setPosition(initPos1.x, initPos1.y);
+		_bullets[0]->sprite.first->setPosition(initPos1, initPos2);
 		_bullets[0]->sprite.first->setRotation(_character->getRotation());
-		_bullets[0]->sprite.second->setPosition(initPos2.x, initPos2.y);
-		_bullets[0]->sprite.second->setRotation(_character->getRotation());
 
-		//auto speedX = cos(_bullets[0]->sprite.first->getRotation() * (M_PI / 180)) * 100;
-		//auto speedY = sin(_bullets[0]->sprite.first->getRotation() * (M_PI / 180)) * 100;
+		//--------------------------SecondBullet init---------------------------------------
+		cosValues = _bullets[0]->launchingPos.second * cos(-_character->getRotation() * (M_PI / 180));
+		sinValues = _bullets[0]->launchingPos.second * sin(-_character->getRotation() * (M_PI / 180));
+
+		initPos1 = _character->getPositionX() + cosValues.x - sinValues.y;
+		initPos2 = _character->getPositionY() + sinValues.x + cosValues.y;
+
+		_bullets[0]->sprite.second->setPosition(initPos1, initPos2);
+		_bullets[0]->sprite.second->setRotation(_character->getRotation());
 	}
 }
 
