@@ -37,6 +37,7 @@ bool Assignment2::init()
 void Assignment2::update(float dt)
 {
 	CharacterMovement(dt);
+	BulletMovment();
 }
 
 
@@ -44,6 +45,8 @@ void Assignment2::menuCloseCallback(Ref* pSender)
 {
 	Director::getInstance()->end();
 }
+
+//----------------------Creation Methods---------------------------------------------------------------------
 
 void Assignment2::CreateCharacter(std::string filePath, cocos2d::Vec2 pos, cocos2d::Vec2 speed)
 {
@@ -59,36 +62,61 @@ void Assignment2::InstantiateBulletPool()
 {
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
-		_bullets[i] = new Bullet("bullet1.png", { _character->getPosition().x + 18, _character->getPosition().y + 20 });
+		_bullets[i] = new Bullet("bullet1.png", { 18, 22 });
 
 		_bullets[i]->sprite.first->setPosition(_bullets[i]->launchingPos.first);
 		_bullets[i]->sprite.second->setPosition(_bullets[i]->launchingPos.second);
 
-		this->addChild(_bullets[i]->sprite.first, 0);
-		this->addChild(_bullets[i]->sprite.second, 0);
+		this->addChild(_bullets[i]->sprite.first);
+		this->addChild(_bullets[i]->sprite.second);
 
-		_character->addChild(_bullets[i]->sprite.first);
-		_character->addChild(_bullets[i]->sprite.second);
-		
-		//disables the objects
+		_bullets[i]->sprite.first->setVisible(false);
+		_bullets[i]->sprite.second->setVisible(false);
 	}
 }
+
+//----------------------Objects Movements---------------------------------------------------------------------
 
 void Assignment2::CharacterMovement(float dt)
 {
 	if (_isKeyAPressed)
 	{
-		_character->setRotation(_character->getRotation() - 20 * dt);
+		_character->setRotation(_character->getRotation() - 40 * dt);
 	}
 	if (_isKeyDPressed)
 	{
-		_character->setRotation(_character->getRotation() + 20 * dt);
+		_character->setRotation(_character->getRotation() + 40 * dt);
 	}
 	if (_isKeyWPressed && !_isKeySPressed)
 	{
-		
+		auto speedX = cos(_character->getRotation() * (M_PI / 180)) * 5;
+		auto speedY = sin(_character->getRotation() * (M_PI / 180)) * 5;
+		_character->setPosition(_character->getPosition().x + speedY, _character->getPosition().y + speedX);
 	}
 }
+
+void Assignment2::BulletMovment()
+{
+	if (_bullets[0]->sprite.first->isVisible())
+	{
+		Vec2 rotation1 = { cos(_character->getRotation() * (float)(M_PI / 180)), sin(_character->getRotation() * (float)(M_PI / 180)) };
+		Vec2 bulletRotation1 = { _bullets[0]->launchingPos.first.x * rotation1.y, _bullets[0]->launchingPos.first.y * rotation1.x };
+		Vec2 bulletRotation2 = { _bullets[0]->launchingPos.second.x * rotation1.y, _bullets[0]->launchingPos.second.y * rotation1.x };
+
+		auto initPos1 = _character->getPosition() + bulletRotation1;
+		auto initPos2 = _character->getPosition() + bulletRotation2;
+
+		_bullets[0]->sprite.first->setPosition(initPos1.x, initPos1.y);
+		_bullets[0]->sprite.first->setRotation(_character->getRotation());
+		_bullets[0]->sprite.second->setPosition(initPos2.x, initPos2.y);
+		_bullets[0]->sprite.second->setRotation(_character->getRotation());
+
+		//auto speedX = cos(_bullets[0]->sprite.first->getRotation() * (M_PI / 180)) * 100;
+		//auto speedY = sin(_bullets[0]->sprite.first->getRotation() * (M_PI / 180)) * 100;
+	}
+}
+
+//----------------------Input Events---------------------------------------------------------------------
 
 void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
@@ -111,7 +139,8 @@ void Assignment2::KeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		break;
 
 	case EventKeyboard::KeyCode::KEY_SPACE:
-		//enables the shot
+		_bullets[0]->sprite.first->setVisible(true);
+		_bullets[0]->sprite.second->setVisible(true);
 		break;
 	}
 }

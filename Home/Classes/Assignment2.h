@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include <math.h>
 
 #define MAXBULLETS 5
 using namespace cocos2d;
@@ -38,6 +39,7 @@ private:
 	void CreateCharacter(std::string filePath, cocos2d::Vec2 pos, cocos2d::Vec2 speed);
 	void KeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	void KeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	void BulletMovment();
 	void CharacterMovement(float dt);
 	void InstantiateBulletPool();
 	void EnableKeyboard();
