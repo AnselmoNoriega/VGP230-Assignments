@@ -25,7 +25,7 @@ bool MazeScene::init()
 
 	cheese = Sprite::create("Cheese.png");
 
-	drawNode = DrawNode::create();
+	drawNode = DrawNode::create(5);
 
 	map->addChild(ratUp, 5);
 	map->addChild(ratRight, 5);
@@ -101,7 +101,9 @@ void MazeScene::setPosition(Sprite* spr, std::pair<int, int> newPosition, std::p
 
 	if (draw)
 	{
-
+		auto dx = tileSize->width / 2;
+		auto dy = tileSize->height / 2;
+		drawNode->drawRect(Vec2(x - dx, y + dy), Vec2(x + dx, y + dy), Vec2(x + dx, y - dy), Vec2(x - dx, y - dy), Color4F::RED);
 	}
 }
 
