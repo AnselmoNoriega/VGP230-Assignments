@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "Player.h"
 #include <math.h>
 
 class MidTerm : public cocos2d::Scene
@@ -13,9 +14,15 @@ public:
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
 
+	CREATE_FUNC(MidTerm)
+
 private:
 
-	EventListenerKeyboard keyboardListener;
+	cocos2d::Vec2 _origin;
+	cocos2d::Size _screenPos;
+
+	Player* player;
+
 	void InitKeyboardListener();
 
 	

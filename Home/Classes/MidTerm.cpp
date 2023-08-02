@@ -17,9 +17,18 @@ static void problemLoading(const char* filename)
 // on "init" you need to initialize your instance
 bool MidTerm::init()
 {
+	//----------------------------------Map Info--------------------------------------------
+	_origin = Director::getInstance()->getVisibleOrigin();
+	_screenPos = Director::getInstance()->getVisibleSize();
+	auto centerOfScreen = Vec2(_screenPos.width / 2, _screenPos.height / 10);
 
+	//----------------------------------Game Objects Init----------------------------------
+	player = new Player(centerOfScreen);
+	this->addChild(player->GetSprite(), 0);
+
+
+	//---------------------------------For Update----------------------------------------
 	this->scheduleUpdate();
-
 	InitKeyboardListener();
 
 	return true;
@@ -27,19 +36,18 @@ bool MidTerm::init()
 
 void MidTerm::update(float dt)
 {
-
+	player->Move(dt, _origin.x, _screenPos.width);
 }
 
 
 void MidTerm::menuCloseCallback(Ref* pSender)
 {
-	_eventDispatcher->removeEventListener(keyboardListener);
 	Director::getInstance()->end();
 }
 
 void MidTerm::InitKeyboardListener()
 {
-	keyboardListener = EventListenerKeyboard::create();
+	auto keyboardListener = EventListenerKeyboard::create();
 	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event)
 	{
 		switch (keyCode)
@@ -47,14 +55,16 @@ void MidTerm::InitKeyboardListener()
 		case EventKeyboard::KeyCode::KEY_W:
 			break;
 		case EventKeyboard::KeyCode::KEY_A:
+			player->SetLeft(true);
 			break;
 		case EventKeyboard::KeyCode::KEY_S:
 			break;
 		case EventKeyboard::KeyCode::KEY_D:
+			player->SetRight(true);
 			break;
 		};
 	};
-
+	
 	keyboardListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event)
 	{
 		switch (keyCode)
@@ -62,10 +72,12 @@ void MidTerm::InitKeyboardListener()
 		case EventKeyboard::KeyCode::KEY_W:
 			break;
 		case EventKeyboard::KeyCode::KEY_A:
+			player->SetLeft(false);
 			break;
 		case EventKeyboard::KeyCode::KEY_S:
 			break;
 		case EventKeyboard::KeyCode::KEY_D:
+			player->SetRight(false);
 			break;
 		}
 	};

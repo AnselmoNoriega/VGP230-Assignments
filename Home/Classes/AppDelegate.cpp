@@ -26,6 +26,7 @@
 #include "Assignment1.h"
 #include "Assignment2.h"
 #include "MazeScene.h"
+#include "MidTerm.h"
 #include "CollisionTestScene.h"
 
 // #define USE_AUDIO_ENGINE 1
@@ -115,7 +116,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = Assignment1::createScene();
     //auto scene = Assignment2::createScene();
     //auto scene = CollisionTestScene::create();
-    auto scene = MazeScene::create();
+    //auto scene = MazeScene::create();
+    auto scene = MidTerm::create();
 
     // run
     director->runWithScene(scene);
