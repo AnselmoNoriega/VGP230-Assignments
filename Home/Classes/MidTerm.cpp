@@ -26,6 +26,7 @@ bool MidTerm::init()
 	player = new Player(centerOfScreen);
 	this->addChild(player->GetSprite(), 0);
 
+	InitBullets();
 
 	//---------------------------------For Update----------------------------------------
 	this->scheduleUpdate();
@@ -37,6 +38,7 @@ bool MidTerm::init()
 void MidTerm::update(float dt)
 {
 	player->Move(dt, _origin.x, _screenPos.width);
+	player->BulletMovement(dt, _screenPos.height);
 }
 
 
@@ -62,9 +64,12 @@ void MidTerm::InitKeyboardListener()
 		case EventKeyboard::KeyCode::KEY_D:
 			player->SetRight(true);
 			break;
+		case EventKeyboard::KeyCode::KEY_SPACE:
+			player->lasers[GetIndex()].LaunchBullet(player->GetPos());
+			break;
 		};
 	};
-	
+
 	keyboardListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event)
 	{
 		switch (keyCode)
@@ -83,4 +88,25 @@ void MidTerm::InitKeyboardListener()
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+}
+
+void MidTerm::InitBullets()
+{
+	for (size_t i = 0; i < MAXBULLETS; i++)
+	{
+		this->addChild(player->lasers[i].GetSprite().first, 0);
+		this->addChild(player->lasers[i].GetSprite().second, 0);
+	}
+
+	bulletIndex = 0;
+}
+
+int MidTerm::GetIndex()
+{
+	if (bulletIndex >= MAXBULLETS)
+	{
+		bulletIndex = 0;
+	}
+
+	return bulletIndex++;
 }

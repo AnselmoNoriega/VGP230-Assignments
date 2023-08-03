@@ -21,9 +21,13 @@ private:
 	cocos2d::Vec2 _origin;
 	cocos2d::Size _screenPos;
 
-	Player* player;
-
 	void InitKeyboardListener();
 
+	//-------------------PlayerHelpers-------------------------
+	Player* player;
+	int bulletIndex;
+
+	void InitBullets();
+	int GetIndex();
 	
 };
