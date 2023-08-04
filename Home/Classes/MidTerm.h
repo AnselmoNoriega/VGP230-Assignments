@@ -35,5 +35,7 @@ private:
 	int GetIndex();
 	void InitEnemies(Vec2 pos);
 	void Movements(float dt);
+
+	bool isColliderOn;
 	
 };

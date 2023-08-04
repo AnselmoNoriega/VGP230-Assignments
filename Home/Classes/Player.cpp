@@ -8,6 +8,13 @@ Player::Player(Vec2 pos)
 	speed = 500;
 	_left = false;
 	_right = false;
+
+	dx = sprite->getContentSize().width;
+	dy = sprite->getContentSize().height;
+	bx = lasers[0].GetSprite().first->getContentSize().width;
+	by = lasers[0].GetSprite().first->getContentSize().height;
+	color = Color4F::BLUE;
+	bulletColor = Color4F::YELLOW;
 }
 
 Sprite* Player::GetSprite()
@@ -54,6 +61,21 @@ void Player::BulletMovement(float dt, float topBound)
 		if (bullet.GetSprite().first->isVisible())
 		{
 			bullet.Movement(dt, topBound);
+		}
+	}
+}
+
+void Player::DrawCollisionBox()
+{
+	debug->drawRect(Vec2(sprite->getPositionX() - dx, sprite->getPositionY() + dy), Vec2(sprite->getPositionX() + dx, sprite->getPositionY() + dy),
+		Vec2(sprite->getPositionX() + dx, sprite->getPositionY() - dy), Vec2(sprite->getPositionX() - dx, sprite->getPositionY() - dy), color);
+
+	for (int i = 0; i < MAXBULLETS; ++i)
+	{
+		if (lasers[i].GetSprite().first->isVisible())
+		{
+			debug->drawRect(Vec2(lasers[i].GetSprite().second->getPositionX() - bx, lasers[i].GetSprite().first->getPositionY() + by), Vec2(lasers[i].GetSprite().first->getPositionX() + bx, lasers[i].GetSprite().first->getPositionY() + by),
+				            Vec2(lasers[i].GetSprite().first->getPositionX() + bx, lasers[i].GetSprite().first->getPositionY() - by), Vec2(lasers[i].GetSprite().second->getPositionX() - bx, lasers[i].GetSprite().first->getPositionY() - by), bulletColor);
 		}
 	}
 }

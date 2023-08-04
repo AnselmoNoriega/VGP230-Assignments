@@ -4,13 +4,21 @@ Enemy::Enemy(Vec2 pos, Vec2 speed)
 {
 	sprite = Sprite::create("interceptor.png");
 	sprite->setPosition(pos);
-	mSpeed = speed;
 	startPosY = sprite->getPositionY();
+
+	mSpeed = speed;
 	shootTimer = 0;
 	speeder = 100;
 	pathMultiplier = 5000;
 	timeToShoot = random(1, 10);
 	bulletIndex = 0;
+
+	dx = sprite->getContentSize().width;
+	dy = sprite->getContentSize().height;
+	bx = lasers[0].GetSprite()->getContentSize().width;
+	by = lasers[0].GetSprite()->getContentSize().height;
+	color = Color4F::GREEN;
+	bulletColor = Color4F::RED;
 }
 
 Sprite* Enemy::GetSprite()
@@ -52,6 +60,21 @@ void Enemy::FireBullet()
 		lasers[bulletIndex].GetSprite()->setVisible(true);
 		++bulletIndex;
 		shootTimer = 0;
+	}
+}
+
+void Enemy::DrawCollisionBox()
+{
+	debug->drawRect(Vec2(sprite->getPositionX() - dx, sprite->getPositionY() + dy), Vec2(sprite->getPositionX() + dx, sprite->getPositionY() + dy),
+		Vec2(sprite->getPositionX() + dx, sprite->getPositionY() - dy), Vec2(sprite->getPositionX() - dx, sprite->getPositionY() - dy), color);
+
+	for (size_t i = 0; i < BULLETCOUNT; i++)
+	{
+		if (lasers[i].GetSprite()->isVisible())
+		{
+			debug->drawRect(Vec2(lasers[i].GetSprite()->getPositionX() - bx, lasers[i].GetSprite()->getPositionY() + by), Vec2(lasers[i].GetSprite()->getPositionX() + bx, lasers[i].GetSprite()->getPositionY() + by),
+				            Vec2(lasers[i].GetSprite()->getPositionX() + bx, lasers[i].GetSprite()->getPositionY() - by), Vec2(lasers[i].GetSprite()->getPositionX() - bx, lasers[i].GetSprite()->getPositionY() - by), bulletColor);
+		}
 	}
 }
 

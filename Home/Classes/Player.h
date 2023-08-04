@@ -36,11 +36,22 @@ public:
 	void Move(float dt, float boundL, float boundR);
 	void BulletMovement(float dt, float topBound);
 
+	void DrawCollisionBox();
+
 	Bullets lasers[MAXBULLETS];
+
+	DrawNode* debug = DrawNode::create(5);
 
 private:
 	Sprite* sprite;
 	float speed;
 	bool _right;
 	bool _left;
+
+	float dx;
+	float dy;
+	float bx;
+	float by;
+	Color4F color;
+	Color4F bulletColor;
 };

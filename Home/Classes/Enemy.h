@@ -33,7 +33,11 @@ public:
 
 	void FireBullet();
 
+	void DrawCollisionBox();
+
 	Blasts lasers[BULLETCOUNT];
+
+	DrawNode* debug = DrawNode::create(5);
 
 private:
 	Sprite* sprite;
@@ -42,7 +46,14 @@ private:
 	float shootTimer;
 	float timeToShoot;
 	int bulletIndex;
-
 	int speeder;
 	int pathMultiplier;
+
+	float dx;
+	float dy;
+	float bx;
+	float by;
+	Color4F color;
+	Color4F bulletColor;
+	bool isColliderOn;
 };

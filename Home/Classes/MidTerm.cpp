@@ -26,10 +26,13 @@ bool MidTerm::init()
 	//----------------------------------Game Objects Init----------------------------------
 	player = new Player(playerPosition);
 	this->addChild(player->GetSprite(), 0);
+	this->addChild(player->debug, 0);
 
 	InitEnemies(centerOfScreen);
 
 	InitBullets();
+
+	isColliderOn = false;
 
 	//---------------------------------For Update----------------------------------------
 	this->scheduleUpdate();
@@ -56,19 +59,19 @@ void MidTerm::InitKeyboardListener()
 	{
 		switch (keyCode)
 		{
-		case EventKeyboard::KeyCode::KEY_W:
-			break;
 		case EventKeyboard::KeyCode::KEY_A:
 			player->SetLeft(true);
-			break;
-		case EventKeyboard::KeyCode::KEY_S:
 			break;
 		case EventKeyboard::KeyCode::KEY_D:
 			player->SetRight(true);
 			break;
+		case EventKeyboard::KeyCode::KEY_C:
+			isColliderOn = !isColliderOn;
+			break;
 		case EventKeyboard::KeyCode::KEY_SPACE:
 			player->lasers[GetIndex()].LaunchBullet(player->GetPos());
 			break;
+		default: break;
 		};
 	};
 
@@ -76,16 +79,13 @@ void MidTerm::InitKeyboardListener()
 	{
 		switch (keyCode)
 		{
-		case EventKeyboard::KeyCode::KEY_W:
-			break;
 		case EventKeyboard::KeyCode::KEY_A:
 			player->SetLeft(false);
-			break;
-		case EventKeyboard::KeyCode::KEY_S:
 			break;
 		case EventKeyboard::KeyCode::KEY_D:
 			player->SetRight(false);
 			break;
+		default: break;
 		}
 	};
 
@@ -127,6 +127,7 @@ void MidTerm::InitEnemies(Vec2 pos)
 		enemy[i] = new Enemy(initPos, speed);
 
 		this->addChild(enemy[i]->GetSprite(), 0);
+		this->addChild(enemy[i]->debug, 1);
 
 		for (int j = 0; j < BULLETCOUNT; ++j)
 		{
@@ -140,8 +141,22 @@ void MidTerm::Movements(float dt)
 	player->Move(dt, _origin.x, _screenPos.width);
 	player->BulletMovement(dt, _screenPos.height);
 
+	player->debug->clear();
+	if (isColliderOn)
+	{
+		player->debug->setLineWidth(5);
+		player->DrawCollisionBox();
+	}
+
 	for (int i = 0; i < ENEMIESCOUNT; ++i)
 	{
 		enemy[i]->Move(dt, _origin.x, _screenPos.width);
+		enemy[i]->debug->clear();
+
+		if (isColliderOn)
+		{
+			enemy[i]->debug->setLineWidth(5);
+			enemy[i]->DrawCollisionBox();
+		}
 	}
 }
