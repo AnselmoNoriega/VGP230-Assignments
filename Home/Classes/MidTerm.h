@@ -35,7 +35,18 @@ private:
 	int GetIndex();
 	void InitEnemies(Vec2 pos);
 	void Movements(float dt);
+	void EnemyCollision(Vec2 playerBullet, Vec2 enemyPos, int enemyNum, int bulletNum);
+	std::vector<Vec2, Vec2> GetEnemyBounds(Vec2 pos);
+	std::vector<Vec2, Vec2> GetPlayerBounds(Vec2 pos);
+	std::vector<Vec2, Vec2> GetEnemyBulletBounds(Vec2 pos);
+	std::vector<Vec2, Vec2> GetPlayerBulletBounds(Vec2 pos);
+
+	bool InsideBounds(std::vector<Vec2, Vec2> obj1, std::vector<Vec2, Vec2> obj2);
 
 	bool isColliderOn;
+	Vec2 enemySize;
+	Vec2 enemyBulletS;
+	Vec2 playerSize;
+	Vec2 playerBulletS;
 	
 };

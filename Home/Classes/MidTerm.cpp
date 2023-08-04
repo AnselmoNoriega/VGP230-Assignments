@@ -32,6 +32,11 @@ bool MidTerm::init()
 
 	InitBullets();
 
+	enemySize = enemy[0]->GetSprite()->getContentSize() / 2;
+	enemyBulletS = enemy[0]->lasers[0].GetSprite()->getContentSize() / 2;
+	playerSize = player->GetSprite()->getContentSize() / 2;
+	playerBulletS = player->lasers[0].GetSprite().first->getContentSize() / 2;
+
 	isColliderOn = false;
 
 	//---------------------------------For Update----------------------------------------
@@ -160,3 +165,45 @@ void MidTerm::Movements(float dt)
 		}
 	}
 }
+
+void MidTerm::EnemyCollision(Vec2 playerBullet, Vec2 enemyPos, int enemyNum, int bulletNum)
+{
+	for (int i = 0; i < MAXBULLETS; i++)
+	{
+		if (player->lasers[i].GetSprite().first->isVisible() && InsideBounds(GetEnemyBounds(enemyPos), GetPlayerBulletBounds(playerBullet)))
+		{
+			player->lasers[bulletNum].GetSprite().first->setVisible(false);
+			player->lasers[bulletNum].GetSprite().second->setVisible(false);
+
+			delete enemy[enemyNum];
+			enemy[enemyNum] = nullptr;
+		}
+	}
+}
+
+std::vector<Vec2, Vec2> MidTerm::GetEnemyBounds(Vec2 pos)
+{
+	return { pos - enemySize, pos + enemySize };
+}
+
+std::vector<Vec2, Vec2> MidTerm::GetPlayerBounds(Vec2 pos)
+{
+	return { pos - playerSize, pos + playerSize };
+}
+
+std::vector<Vec2, Vec2> MidTerm::GetEnemyBulletBounds(Vec2 pos)
+{
+	return { pos - enemyBulletS, pos + enemyBulletS };
+}
+
+std::vector<Vec2, Vec2> MidTerm::GetPlayerBulletBounds(Vec2 pos)
+{
+	return { pos - playerBulletS, pos + playerBulletS };
+}
+
+bool MidTerm::InsideBounds(std::vector<Vec2, Vec2> obj1, std::vector<Vec2, Vec2> obj2)
+{
+	return false;
+}
+
+
