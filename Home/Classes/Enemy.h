@@ -21,7 +21,7 @@ public:
 
 	private:
 		float speed;
-		Sprite* sprite;
+		Sprite* bSprite;
 		Vec2 launchingPos;
 	};
 
@@ -30,7 +30,6 @@ public:
 	Sprite* GetSprite();
 
 	void Move(float dt, float boundL, float boundR);
-	void BulletMovement(float dt, float lowerBound);
 
 	void FireBullet();
 
@@ -41,4 +40,9 @@ private:
 	Vec2 speed;
 	float startPosY;
 	float shootTimer;
+	float timeToShoot;
+	int bulletIndex;
+
+	int speeder;
+	int pathMultiplier;
 };
