@@ -22,6 +22,16 @@ public:
 	void changeActiveSprite(Sprite* newActive);
 
 	CREATE_FUNC(MazeScene)
+
+	const Size* mapSize;
+	const Size* tileSize;
+
+	std::pair<int, int> playerPosition;
+	std::pair<int, int> endPosition;
+
+	TMXLayer* path;
+	DrawNode* drawNode;
+
 private:
 	enum GameState
 	{
@@ -31,7 +41,6 @@ private:
 		Victory
 	} gameState = Start;
 
-	TMXLayer* path;
 	TMXLayer* collision;
 
 	Sprite* active;
@@ -40,13 +49,6 @@ private:
 	Sprite* ratUp;
 	Sprite* ratRight;
 	Sprite* cheese;
-	DrawNode* drawNode;
-
-	std::pair<int, int> playerPosition;
-	std::pair<int, int> endPosition;
-
-	const Size* mapSize;
-	const Size* tileSize;
 
 	float cheeseAnimationTimer = 0;
 

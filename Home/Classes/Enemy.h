@@ -1,31 +1,29 @@
 #pragma once
 #include "cocos2d.h"
 
-#define MAXBULLETS 5
 using namespace cocos2d;
+#define BULLETCOUNT 5
 
-class Player
+class Enemy
 {
-public:
-
 	class Bullets
 	{
 	public:
 
 		Bullets();
 
-		std::pair <Sprite*, Sprite*> GetSprite();
+		Sprite* GetSprite();
 
 		void LaunchBullet(Vec2 pos);
-		void Movement(float dt, float topBound);
+		void Movement(float dt);
 
 	private:
 		float speed;
-		std::pair < Sprite*, Sprite*> sprite;
-		std::pair < Vec2, Vec2> launchingPos;
+		Sprite* sprite;
+		Sprite* launchingPos;
 	};
 
-	Player(Vec2 pos);
+	Enemy(Vec2 pos);
 
 	Sprite* GetSprite();
 	Vec2 GetPos();
@@ -36,11 +34,5 @@ public:
 	void Move(float dt, float boundL, float boundR);
 	void BulletMovement(float dt, float topBound);
 
-	Bullets lasers[MAXBULLETS];
-
-private:
-	Sprite* sprite;
-	float speed;
-	bool _right;
-	bool _left;
+	Bullets lasers[BULLETCOUNT];
 };

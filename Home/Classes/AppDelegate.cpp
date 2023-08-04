@@ -116,8 +116,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = Assignment1::createScene();
     //auto scene = Assignment2::createScene();
     //auto scene = CollisionTestScene::create();
-    //auto scene = MazeScene::create();
-    auto scene = MidTerm::create();
+    auto scene = MazeScene::create();
+    //auto scene = MidTerm::create();
 
     // run
     director->runWithScene(scene);

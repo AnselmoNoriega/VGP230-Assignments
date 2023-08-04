@@ -43,15 +43,9 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test vgp230 into root project
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 endif()
 
-# add cross-platforms source files and header files
-#list(APPEND GAME_SOURCE
-# Classes/AppDelegate.cpp
-# )
-#list(APPEND GAME_HEADER
-# Classes/AppDelegate.h
-# )
-file(GLOB GAME_SOURCE "Classes/*.cpp")
-file(GLOB GAME_HEADER "Classes/*.h")
+# record sources, headers, resources...
+set(GAME_SOURCE)
+set(GAME_HEADER)
 
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
@@ -60,13 +54,19 @@ if(APPLE OR WINDOWS)
     cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
-# add cross-platforms source files and header files
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+endif(MSVC)
+
+# add cross-platforms source files and header files 
 #list(APPEND GAME_SOURCE
-# Classes/AppDelegate.cpp
-# )
+#     Classes/AppDelegate.cpp
+#     )
 #list(APPEND GAME_HEADER
-# Classes/AppDelegate.h
-# )
+#     Classes/AppDelegate.h
+#     )
+
+
 file(GLOB GAME_SOURCE "Classes/*.cpp")
 file(GLOB GAME_HEADER "Classes/*.h")
 
