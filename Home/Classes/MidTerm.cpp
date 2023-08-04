@@ -22,19 +22,12 @@ bool MidTerm::init()
 	_screenPos = Director::getInstance()->getVisibleSize();
 	auto centerOfScreen = Vec2(_screenPos.width / 2, _screenPos.height / 2);
 	auto playerPosition = Vec2(_screenPos.width / 2, _screenPos.height / 10);
-	auto enemyPosition = Vec2(_screenPos.width / 2, _screenPos.height / 1.2);
 
 	//----------------------------------Game Objects Init----------------------------------
 	player = new Player(playerPosition);
 	this->addChild(player->GetSprite(), 0);
-	
-	enemy = new Enemy(enemyPosition);
-	this->addChild(enemy->GetSprite(), 0);
 
-	for (int i = 0; i < BULLETCOUNT; i++)
-	{
-		this->addChild(enemy->lasers[i].GetSprite(), 0);
-	}
+	InitEnemies(centerOfScreen);
 
 	InitBullets();
 
@@ -47,10 +40,7 @@ bool MidTerm::init()
 
 void MidTerm::update(float dt)
 {
-	player->Move(dt, _origin.x, _screenPos.width);
-	player->BulletMovement(dt, _screenPos.height);
-
-	enemy->Move(dt, _origin.x, _screenPos.width);
+	Movements(dt);
 }
 
 
@@ -121,4 +111,37 @@ int MidTerm::GetIndex()
 	}
 
 	return bulletIndex++;
+}
+
+void MidTerm::InitEnemies(Vec2 pos)
+{
+	Vec2 initPos = pos;
+	Vec2 speed = { 700, 100 };
+
+	for (int i = 0; i < ENEMIESCOUNT; ++i)
+	{
+		initPos.x = random(_origin.x, _screenPos.width);
+		initPos.y += 10;
+		speed = { random(400.0f, 1000.0f), random(0.0f, 200.0f) };
+
+		enemy[i] = new Enemy(initPos, speed);
+
+		this->addChild(enemy[i]->GetSprite(), 0);
+
+		for (int j = 0; j < BULLETCOUNT; ++j)
+		{
+			this->addChild(enemy[i]->lasers[j].GetSprite(), 0);
+		}
+	}
+}
+
+void MidTerm::Movements(float dt)
+{
+	player->Move(dt, _origin.x, _screenPos.width);
+	player->BulletMovement(dt, _screenPos.height);
+
+	for (int i = 0; i < ENEMIESCOUNT; ++i)
+	{
+		enemy[i]->Move(dt, _origin.x, _screenPos.width);
+	}
 }

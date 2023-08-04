@@ -1,15 +1,15 @@
 #include "Enemy.h"
 
-Enemy::Enemy(Vec2 pos)
+Enemy::Enemy(Vec2 pos, Vec2 speed)
 {
 	sprite = Sprite::create("interceptor.png");
 	sprite->setPosition(pos);
-	speed = { 700, 100 };
+	mSpeed = speed;
 	startPosY = sprite->getPositionY();
 	shootTimer = 0;
 	speeder = 100;
 	pathMultiplier = 5000;
-	timeToShoot = 5;
+	timeToShoot = random(1, 10);
 	bulletIndex = 0;
 }
 
@@ -22,9 +22,9 @@ void Enemy::Move(float dt, float boundL, float boundR)
 {
 	if (sprite->getPositionX() >= boundR || sprite->getPositionX() <= boundL)
 	{
-		speed.x *= (-1);
+		mSpeed.x *= (-1);
 	}
-	sprite->setPositionX(sprite->getPositionX() + speed.x * dt);
+	sprite->setPositionX(sprite->getPositionX() + mSpeed.x * dt);
 	sprite->setPositionY(startPosY + sin(sprite->getPositionX() / speeder) * pathMultiplier * dt);
 
 	shootTimer += dt;
@@ -49,7 +49,7 @@ void Enemy::FireBullet()
 	if (shootTimer >= timeToShoot)
 	{
 		lasers[bulletIndex].LaunchBullet(sprite->getPosition());
-		sprite->setVisible(true);
+		lasers[bulletIndex].GetSprite()->setVisible(true);
 		++bulletIndex;
 		shootTimer = 0;
 	}

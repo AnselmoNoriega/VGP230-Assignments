@@ -4,6 +4,8 @@
 #include "Enemy.h"
 #include <math.h>
 
+#define ENEMIESCOUNT 20
+
 class MidTerm : public cocos2d::Scene
 {
 public:
@@ -26,10 +28,12 @@ private:
 
 	//-------------------PlayerHelpers-------------------------
 	Player* player;
-	Enemy* enemy;
+	Enemy* enemy[ENEMIESCOUNT];
 	int bulletIndex;
 
 	void InitBullets();
 	int GetIndex();
+	void InitEnemies(Vec2 pos);
+	void Movements(float dt);
 	
 };

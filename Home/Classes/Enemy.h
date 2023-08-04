@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 
 using namespace cocos2d;
-#define BULLETCOUNT 5
+#define BULLETCOUNT 2
 
 class Enemy
 {
@@ -25,7 +25,7 @@ public:
 		Vec2 launchingPos;
 	};
 
-	Enemy(Vec2 pos);
+	Enemy(Vec2 pos, Vec2 speed);
 
 	Sprite* GetSprite();
 
@@ -37,7 +37,7 @@ public:
 
 private:
 	Sprite* sprite;
-	Vec2 speed;
+	Vec2 mSpeed;
 	float startPosY;
 	float shootTimer;
 	float timeToShoot;
