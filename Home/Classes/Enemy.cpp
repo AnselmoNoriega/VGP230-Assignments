@@ -51,6 +51,7 @@ void Enemy::FireBullet()
 		lasers[bulletIndex].LaunchBullet(sprite->getPosition());
 		sprite->setVisible(true);
 		++bulletIndex;
+		shootTimer = 0;
 	}
 }
 
@@ -64,7 +65,7 @@ Enemy::Blasts::Blasts()
 
 Sprite* Enemy::Blasts::GetSprite()
 {
-	return nullptr;
+	return bSprite;
 }
 
 void Enemy::Blasts::LaunchBullet(Vec2 pos)

@@ -31,6 +31,11 @@ bool MidTerm::init()
 	enemy = new Enemy(enemyPosition);
 	this->addChild(enemy->GetSprite(), 0);
 
+	for (int i = 0; i < BULLETCOUNT; i++)
+	{
+		this->addChild(enemy->lasers[i].GetSprite(), 0);
+	}
+
 	InitBullets();
 
 	//---------------------------------For Update----------------------------------------
