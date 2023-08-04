@@ -20,11 +20,16 @@ bool MidTerm::init()
 	//----------------------------------Map Info--------------------------------------------
 	_origin = Director::getInstance()->getVisibleOrigin();
 	_screenPos = Director::getInstance()->getVisibleSize();
-	auto centerOfScreen = Vec2(_screenPos.width / 2, _screenPos.height / 10);
+	auto centerOfScreen = Vec2(_screenPos.width / 2, _screenPos.height / 2);
+	auto playerPosition = Vec2(_screenPos.width / 2, _screenPos.height / 10);
+	auto enemyPosition = Vec2(_screenPos.width / 2, _screenPos.height / 1.2);
 
 	//----------------------------------Game Objects Init----------------------------------
-	player = new Player(centerOfScreen);
+	player = new Player(playerPosition);
 	this->addChild(player->GetSprite(), 0);
+	
+	enemy = new Enemy(enemyPosition);
+	this->addChild(enemy->GetSprite(), 0);
 
 	InitBullets();
 
@@ -39,6 +44,8 @@ void MidTerm::update(float dt)
 {
 	player->Move(dt, _origin.x, _screenPos.width);
 	player->BulletMovement(dt, _screenPos.height);
+
+	enemy->Move(dt, _origin.x, _screenPos.width);
 }
 
 

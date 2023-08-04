@@ -6,11 +6,13 @@ using namespace cocos2d;
 
 class Enemy
 {
-	class Bullets
+public:
+
+	class Blasts
 	{
 	public:
 
-		Bullets();
+		Blasts();
 
 		Sprite* GetSprite();
 
@@ -20,19 +22,23 @@ class Enemy
 	private:
 		float speed;
 		Sprite* sprite;
-		Sprite* launchingPos;
+		Vec2 launchingPos;
 	};
 
 	Enemy(Vec2 pos);
 
 	Sprite* GetSprite();
-	Vec2 GetPos();
 
-	void SetPosition(Vec2 pos);
-	void SetLeft(bool condition);
-	void SetRight(bool condition);
 	void Move(float dt, float boundL, float boundR);
-	void BulletMovement(float dt, float topBound);
+	void BulletMovement(float dt, float lowerBound);
 
-	Bullets lasers[BULLETCOUNT];
+	void FireBullet();
+
+	Blasts lasers[BULLETCOUNT];
+
+private:
+	Sprite* sprite;
+	Vec2 speed;
+	float startPosY;
+	float shootTimer;
 };
