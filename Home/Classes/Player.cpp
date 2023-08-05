@@ -65,6 +65,11 @@ void Player::BulletMovement(float dt, float topBound)
 	}
 }
 
+void Player::PlayerGotHit()
+{
+
+}
+
 void Player::DrawCollisionBox()
 {
 	debug->drawRect(Vec2(sprite->getPositionX() - dx, sprite->getPositionY() + dy), Vec2(sprite->getPositionX() + dx, sprite->getPositionY() + dy),

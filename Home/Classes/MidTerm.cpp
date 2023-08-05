@@ -147,6 +147,7 @@ void MidTerm::Movements(float dt)
 {
 	player->Move(dt, _origin.x, _screenPos.width);
 	player->BulletMovement(dt, _screenPos.height);
+	PlayerCollision();
 
 	player->debug->clear();
 	if (isColliderOn)
@@ -172,9 +173,9 @@ void MidTerm::Movements(float dt)
 
 void MidTerm::EnemyCollision(Vec2 enemyPos, int enemyNum)
 {
-	for (int i = 0; i < MAXBULLETS; i++)
+	for (int i = 0; i < MAXBULLETS; ++i)
 	{
-		if (player->lasers[i].GetSprite().first->isVisible() && InsideBounds(GetEnemyBounds(enemyPos), GetPlayerBulletBounds(player->lasers[i].GetSprite().second->getPosition(), player->lasers[i].GetSprite().first->getPosition())))
+		if (player->lasers[i].GetSprite().first->isVisible() && InsideBounds(GetBounds(enemyPos, enemySize), GetPlayerBulletBounds(player->lasers[i].GetSprite().second->getPosition(), player->lasers[i].GetSprite().first->getPosition())))
 		{
 			player->lasers[i].GetSprite().first->setVisible(false);
 			player->lasers[i].GetSprite().second->setVisible(false);
@@ -191,28 +192,27 @@ void MidTerm::EnemyCollision(Vec2 enemyPos, int enemyNum)
 	}
 }
 
-Vec4 MidTerm::GetEnemyBounds(Vec2 pos)
+void MidTerm::PlayerCollision()
 {
-	return { pos.x - enemySize.x,
-		     pos.y - enemySize.y, 
-		     pos.x + enemySize.x,
-			 pos.y + enemySize.y };
+	for (int i = 0; i < countEnemies; ++i)
+	{
+		for (int j = 0; j < BULLETCOUNT; ++j)
+		{
+			if (enemy[i]->lasers[j].GetSprite()->isVisible() && InsideBounds(GetBounds(enemy[i]->lasers[j].GetSprite()->getPosition(), enemyBulletS), GetBounds(player->GetSprite()->getPosition(), playerSize)))
+			{
+				player->PlayerGotHit();
+				enemy[i]->lasers[j].GetSprite()->setVisible(false);
+			}
+		}
+	}
 }
 
-Vec4 MidTerm::GetPlayerBounds(Vec2 pos)
+Vec4 MidTerm::GetBounds(Vec2 pos, Vec2 offset)
 {
-	return { pos.x - playerSize.x, 
-		     pos.y - playerSize.y, 
-		     pos.x + playerSize.x, 
-		     pos.y + playerSize.y };
-}
-
-Vec4 MidTerm::GetEnemyBulletBounds(Vec2 pos)
-{
-	return { pos.x - enemyBulletS.x, 
-		     pos.y - enemyBulletS.y, 
-		     pos.x + enemyBulletS.x,  
-		     pos.y + enemyBulletS.y };
+	return { pos.x - offset.x,
+		     pos.y - offset.y, 
+		     pos.x + offset.x,
+			 pos.y + offset.y };
 }
 
 Vec4 MidTerm::GetPlayerBulletBounds(Vec2 pos1, Vec2 pos2)

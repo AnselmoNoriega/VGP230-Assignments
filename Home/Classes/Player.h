@@ -36,6 +36,8 @@ public:
 	void Move(float dt, float boundL, float boundR);
 	void BulletMovement(float dt, float topBound);
 
+	void PlayerGotHit();
+
 	void DrawCollisionBox();
 
 	Bullets lasers[MAXBULLETS];

@@ -37,9 +37,8 @@ private:
 	void InitEnemies(Vec2 pos);
 	void Movements(float dt);
 	void EnemyCollision(Vec2 enemyPos, int enemyNum);
-	Vec4 GetEnemyBounds(Vec2 pos);
-	Vec4 GetPlayerBounds(Vec2 pos);
-	Vec4 GetEnemyBulletBounds(Vec2 pos);
+	void PlayerCollision();
+	Vec4 GetBounds(Vec2 pos, Vec2 offset);
 	Vec4 GetPlayerBulletBounds(Vec2 pos1, Vec2 pos2);
 
 	bool InsideBounds(Vec4 obj1, Vec4 obj2);
