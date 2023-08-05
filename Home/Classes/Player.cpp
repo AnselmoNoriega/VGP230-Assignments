@@ -15,6 +15,9 @@ Player::Player(Vec2 pos)
 	by = lasers[0].GetSprite().first->getContentSize().height;
 	color = Color4F::BLUE;
 	bulletColor = Color4F::YELLOW;
+	health = Sprite::create("bar_red.png");
+	health->setPosition(sprite->getPositionX(), sprite->getPositionY() - 100);
+	health->setScaleX(health->getScaleX() + 3);
 }
 
 Sprite* Player::GetSprite()
@@ -67,6 +70,7 @@ void Player::BulletMovement(float dt, float topBound)
 
 void Player::PlayerGotHit()
 {
+	health->setScaleX(health->getScaleX() - 1);
 
 }
 

@@ -27,6 +27,7 @@ bool MidTerm::init()
 	player = new Player(playerPosition);
 	this->addChild(player->GetSprite(), 0);
 	this->addChild(player->debug, 0);
+	this->addChild(player->health, 0);
 
 	InitEnemies(centerOfScreen);
 
@@ -202,6 +203,10 @@ void MidTerm::PlayerCollision()
 			{
 				player->PlayerGotHit();
 				enemy[i]->lasers[j].GetSprite()->setVisible(false);
+				if (player->health->getScaleX() <= 0)
+				{
+					Director::getInstance()->replaceScene(MidTerm::create());
+				}
 			}
 		}
 	}
@@ -210,16 +215,16 @@ void MidTerm::PlayerCollision()
 Vec4 MidTerm::GetBounds(Vec2 pos, Vec2 offset)
 {
 	return { pos.x - offset.x,
-		     pos.y - offset.y, 
-		     pos.x + offset.x,
+			 pos.y - offset.y,
+			 pos.x + offset.x,
 			 pos.y + offset.y };
 }
 
 Vec4 MidTerm::GetPlayerBulletBounds(Vec2 pos1, Vec2 pos2)
 {
 	return { pos1.x - playerBulletS.x,
-		     pos1.y - playerBulletS.y, 
-		     pos2.x + playerBulletS.x,
+			 pos1.y - playerBulletS.y,
+			 pos2.x + playerBulletS.x,
 			 pos2.y + playerBulletS.y };
 }
 

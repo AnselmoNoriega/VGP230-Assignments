@@ -43,6 +43,7 @@ public:
 	Bullets lasers[MAXBULLETS];
 
 	DrawNode* debug = DrawNode::create(5);
+	Sprite* health;
 
 private:
 	Sprite* sprite;
