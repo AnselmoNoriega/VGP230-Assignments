@@ -28,20 +28,21 @@ private:
 
 	//-------------------PlayerHelpers-------------------------
 	Player* player;
-	Enemy* enemy[ENEMIESCOUNT];
+	std::vector<Enemy*> enemy;
 	int bulletIndex;
+	int countEnemies;
 
 	void InitBullets();
 	int GetIndex();
 	void InitEnemies(Vec2 pos);
 	void Movements(float dt);
-	void EnemyCollision(Vec2 playerBullet, Vec2 enemyPos, int enemyNum, int bulletNum);
-	std::vector<Vec2, Vec2> GetEnemyBounds(Vec2 pos);
-	std::vector<Vec2, Vec2> GetPlayerBounds(Vec2 pos);
-	std::vector<Vec2, Vec2> GetEnemyBulletBounds(Vec2 pos);
-	std::vector<Vec2, Vec2> GetPlayerBulletBounds(Vec2 pos);
+	void EnemyCollision(Vec2 enemyPos, int enemyNum);
+	Vec4 GetEnemyBounds(Vec2 pos);
+	Vec4 GetPlayerBounds(Vec2 pos);
+	Vec4 GetEnemyBulletBounds(Vec2 pos);
+	Vec4 GetPlayerBulletBounds(Vec2 pos1, Vec2 pos2);
 
-	bool InsideBounds(std::vector<Vec2, Vec2> obj1, std::vector<Vec2, Vec2> obj2);
+	bool InsideBounds(Vec4 obj1, Vec4 obj2);
 
 	bool isColliderOn;
 	Vec2 enemySize;

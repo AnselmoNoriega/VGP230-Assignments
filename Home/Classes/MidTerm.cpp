@@ -38,6 +38,7 @@ bool MidTerm::init()
 	playerBulletS = player->lasers[0].GetSprite().first->getContentSize() / 2;
 
 	isColliderOn = false;
+	countEnemies = ENEMIESCOUNT;
 
 	//---------------------------------For Update----------------------------------------
 	this->scheduleUpdate();
@@ -122,6 +123,7 @@ void MidTerm::InitEnemies(Vec2 pos)
 {
 	Vec2 initPos = pos;
 	Vec2 speed = { 700, 100 };
+	enemy.resize(ENEMIESCOUNT, nullptr);
 
 	for (int i = 0; i < ENEMIESCOUNT; ++i)
 	{
@@ -153,7 +155,7 @@ void MidTerm::Movements(float dt)
 		player->DrawCollisionBox();
 	}
 
-	for (int i = 0; i < ENEMIESCOUNT; ++i)
+	for (int i = 0; i < countEnemies; ++i)
 	{
 		enemy[i]->Move(dt, _origin.x, _screenPos.width);
 		enemy[i]->debug->clear();
@@ -163,47 +165,67 @@ void MidTerm::Movements(float dt)
 			enemy[i]->debug->setLineWidth(5);
 			enemy[i]->DrawCollisionBox();
 		}
+
+		EnemyCollision(enemy[i]->GetSprite()->getPosition(), i);
 	}
 }
 
-void MidTerm::EnemyCollision(Vec2 playerBullet, Vec2 enemyPos, int enemyNum, int bulletNum)
+void MidTerm::EnemyCollision(Vec2 enemyPos, int enemyNum)
 {
 	for (int i = 0; i < MAXBULLETS; i++)
 	{
-		if (player->lasers[i].GetSprite().first->isVisible() && InsideBounds(GetEnemyBounds(enemyPos), GetPlayerBulletBounds(playerBullet)))
+		if (player->lasers[i].GetSprite().first->isVisible() && InsideBounds(GetEnemyBounds(enemyPos), GetPlayerBulletBounds(player->lasers[i].GetSprite().second->getPosition(), player->lasers[i].GetSprite().first->getPosition())))
 		{
-			player->lasers[bulletNum].GetSprite().first->setVisible(false);
-			player->lasers[bulletNum].GetSprite().second->setVisible(false);
+			player->lasers[i].GetSprite().first->setVisible(false);
+			player->lasers[i].GetSprite().second->setVisible(false);
 
+			enemy[enemyNum]->GetSprite()->setVisible(false);
+			enemy[enemyNum]->lasers[0].GetSprite()->setVisible(false);
+			enemy[enemyNum]->lasers[1].GetSprite()->setVisible(false);
+			enemy[enemyNum]->debug->clear();
 			delete enemy[enemyNum];
 			enemy[enemyNum] = nullptr;
+			enemy.erase(enemy.begin() + enemyNum);
+			--countEnemies;
 		}
 	}
 }
 
-std::vector<Vec2, Vec2> MidTerm::GetEnemyBounds(Vec2 pos)
+Vec4 MidTerm::GetEnemyBounds(Vec2 pos)
 {
-	return { pos - enemySize, pos + enemySize };
+	return { pos.x - enemySize.x,
+		     pos.y - enemySize.y, 
+		     pos.x + enemySize.x,
+			 pos.y + enemySize.y };
 }
 
-std::vector<Vec2, Vec2> MidTerm::GetPlayerBounds(Vec2 pos)
+Vec4 MidTerm::GetPlayerBounds(Vec2 pos)
 {
-	return { pos - playerSize, pos + playerSize };
+	return { pos.x - playerSize.x, 
+		     pos.y - playerSize.y, 
+		     pos.x + playerSize.x, 
+		     pos.y + playerSize.y };
 }
 
-std::vector<Vec2, Vec2> MidTerm::GetEnemyBulletBounds(Vec2 pos)
+Vec4 MidTerm::GetEnemyBulletBounds(Vec2 pos)
 {
-	return { pos - enemyBulletS, pos + enemyBulletS };
+	return { pos.x - enemyBulletS.x, 
+		     pos.y - enemyBulletS.y, 
+		     pos.x + enemyBulletS.x,  
+		     pos.y + enemyBulletS.y };
 }
 
-std::vector<Vec2, Vec2> MidTerm::GetPlayerBulletBounds(Vec2 pos)
+Vec4 MidTerm::GetPlayerBulletBounds(Vec2 pos1, Vec2 pos2)
 {
-	return { pos - playerBulletS, pos + playerBulletS };
+	return { pos1.x - playerBulletS.x,
+		     pos1.y - playerBulletS.y, 
+		     pos2.x + playerBulletS.x,
+			 pos2.y + playerBulletS.y };
 }
 
-bool MidTerm::InsideBounds(std::vector<Vec2, Vec2> obj1, std::vector<Vec2, Vec2> obj2)
+bool MidTerm::InsideBounds(Vec4 obj1, Vec4 obj2)
 {
-	return false;
+	return (obj1.x <= obj2.z && obj1.z >= obj2.x) && (obj1.y <= obj2.w && obj1.w >= obj2.y);
 }
 
 
