@@ -39,7 +39,6 @@ bool MidTerm::init()
 	playerBulletS = player->lasers[0].GetSprite().first->getContentSize() / 2;
 
 	isColliderOn = false;
-	countEnemies = ENEMIESCOUNT;
 
 	InitBackground(centerOfScreen);
 
@@ -54,6 +53,20 @@ void MidTerm::update(float dt)
 {
 	Movements(dt);
 	BackgroundMovement(dt);
+
+	if (enemy.empty() && boss == nullptr)
+	{
+		auto rand = random(1, 10);
+
+		if (rand == 5)
+		{
+			InitBoss({ _origin.x + _screenPos.width / 2,  _screenPos.height - 400 });
+		}
+		else
+		{
+			InitEnemies({ _screenPos.width / 2, _screenPos.height / 2 });
+		}
+	}
 
 }
 
@@ -126,11 +139,12 @@ int MidTerm::GetIndex()
 
 void MidTerm::InitEnemies(Vec2 pos)
 {
+	auto size = random(5, ENEMIESCOUNT);
 	Vec2 initPos = pos;
 	Vec2 speed = { 700, 100 };
-	enemy.resize(ENEMIESCOUNT, nullptr);
+	enemy.resize(size, nullptr);
 
-	for (int i = 0; i < ENEMIESCOUNT; ++i)
+	for (int i = 0; i < size; ++i)
 	{
 		initPos.x = random(_origin.x, _screenPos.width);
 		initPos.y += 10;
@@ -148,6 +162,16 @@ void MidTerm::InitEnemies(Vec2 pos)
 	}
 }
 
+void MidTerm::InitBoss(Vec2 pos)
+{
+	boss = new Boss(pos, _origin.x, _screenPos.width, _origin.y);
+	this->addChild(boss->GetSprite(), 10);
+	bossSize = boss->GetSprite()->getContentSize() * 2.5;
+
+	this->addChild(boss->healthBar, 10);
+	boss->healthBar->setPosition(pos.x, _screenPos.height - 100);
+}
+
 void MidTerm::Movements(float dt)
 {
 	player->Move(dt, _origin.x, _screenPos.width);
@@ -161,7 +185,7 @@ void MidTerm::Movements(float dt)
 		player->DrawCollisionBox();
 	}
 
-	for (int i = 0; i < countEnemies; ++i)
+	for (int i = 0; i < enemy.size(); ++i)
 	{
 		enemy[i]->Move(dt, _origin.x, _screenPos.width);
 		enemy[i]->debug->clear();
@@ -173,6 +197,31 @@ void MidTerm::Movements(float dt)
 		}
 
 		EnemyCollision(enemy[i]->GetSprite()->getPosition(), i);
+	}
+
+	if (boss != nullptr)
+	{
+		BossCollision(boss->GetSprite()->getPosition());
+	}
+}
+
+void MidTerm::BossCollision(Vec2 bossPos)
+{
+	for (int i = 0; i < MAXBULLETS; ++i)
+	{
+		if (player->lasers[i].GetSprite().first->isVisible() && InsideBounds(GetBounds(bossPos, bossSize), GetPlayerBulletBounds(player->lasers[i].GetSprite().second->getPosition(), player->lasers[i].GetSprite().first->getPosition())))
+		{
+			player->lasers[i].GetSprite().first->setVisible(false);
+			player->lasers[i].GetSprite().second->setVisible(false);
+
+			boss->GotHit();
+
+			if (boss->healthBar->getScaleX() <= 0)
+			{
+				delete[] boss;
+				boss = nullptr;
+			}
+		}
 	}
 }
 
@@ -192,14 +241,13 @@ void MidTerm::EnemyCollision(Vec2 enemyPos, int enemyNum)
 			delete enemy[enemyNum];
 			enemy[enemyNum] = nullptr;
 			enemy.erase(enemy.begin() + enemyNum);
-			--countEnemies;
 		}
 	}
 }
 
 void MidTerm::PlayerCollision()
 {
-	for (int i = 0; i < countEnemies; ++i)
+	for (int i = 0; i < enemy.size(); ++i)
 	{
 		for (int j = 0; j < BULLETCOUNT; ++j)
 		{
