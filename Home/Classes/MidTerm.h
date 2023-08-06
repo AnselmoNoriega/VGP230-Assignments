@@ -5,6 +5,7 @@
 #include <math.h>
 
 #define ENEMIESCOUNT 20
+#define PARALAXCOUNT 3
 
 class MidTerm : public cocos2d::Scene
 {
@@ -48,5 +49,14 @@ private:
 	Vec2 enemyBulletS;
 	Vec2 playerSize;
 	Vec2 playerBulletS;
+
+	//--------------background------------------------
+	Sprite* background[PARALAXCOUNT];
+	Sprite* planet[PARALAXCOUNT];
+	Sprite* planetsCorners[PARALAXCOUNT];
+	Sprite* dust[PARALAXCOUNT];
+
+	void InitBackground(Vec2 pos);
+	void BackgroundMovement(float dt);
 	
 };

@@ -19,6 +19,7 @@ Enemy::Enemy(Vec2 pos, Vec2 speed)
 	by = lasers[0].GetSprite()->getContentSize().height;
 	color = Color4F::GREEN;
 	bulletColor = Color4F::RED;
+	isColliderOn = false;
 }
 
 Sprite* Enemy::GetSprite()

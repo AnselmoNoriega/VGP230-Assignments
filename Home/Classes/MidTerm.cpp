@@ -25,9 +25,9 @@ bool MidTerm::init()
 
 	//----------------------------------Game Objects Init----------------------------------
 	player = new Player(playerPosition);
-	this->addChild(player->GetSprite(), 0);
-	this->addChild(player->debug, 0);
-	this->addChild(player->health, 0);
+	this->addChild(player->GetSprite(), 10);
+	this->addChild(player->debug, 10);
+	this->addChild(player->health, 10);
 
 	InitEnemies(centerOfScreen);
 
@@ -41,6 +41,8 @@ bool MidTerm::init()
 	isColliderOn = false;
 	countEnemies = ENEMIESCOUNT;
 
+	InitBackground(centerOfScreen);
+
 	//---------------------------------For Update----------------------------------------
 	this->scheduleUpdate();
 	InitKeyboardListener();
@@ -51,6 +53,8 @@ bool MidTerm::init()
 void MidTerm::update(float dt)
 {
 	Movements(dt);
+	BackgroundMovement(dt);
+
 }
 
 
@@ -103,8 +107,8 @@ void MidTerm::InitBullets()
 {
 	for (size_t i = 0; i < MAXBULLETS; i++)
 	{
-		this->addChild(player->lasers[i].GetSprite().first, 0);
-		this->addChild(player->lasers[i].GetSprite().second, 0);
+		this->addChild(player->lasers[i].GetSprite().first, 10);
+		this->addChild(player->lasers[i].GetSprite().second, 10);
 	}
 
 	bulletIndex = 0;
@@ -134,12 +138,12 @@ void MidTerm::InitEnemies(Vec2 pos)
 
 		enemy[i] = new Enemy(initPos, speed);
 
-		this->addChild(enemy[i]->GetSprite(), 0);
-		this->addChild(enemy[i]->debug, 1);
+		this->addChild(enemy[i]->GetSprite(), 10);
+		this->addChild(enemy[i]->debug, 10);
 
 		for (int j = 0; j < BULLETCOUNT; ++j)
 		{
-			this->addChild(enemy[i]->lasers[j].GetSprite(), 0);
+			this->addChild(enemy[i]->lasers[j].GetSprite(), 10);
 		}
 	}
 }
@@ -231,6 +235,62 @@ Vec4 MidTerm::GetPlayerBulletBounds(Vec2 pos1, Vec2 pos2)
 bool MidTerm::InsideBounds(Vec4 obj1, Vec4 obj2)
 {
 	return (obj1.x <= obj2.z && obj1.z >= obj2.x) && (obj1.y <= obj2.w && obj1.w >= obj2.y);
+}
+
+void MidTerm::InitBackground(Vec2 pos)
+{
+	for (int i = 0; i < PARALAXCOUNT; ++i)
+	{
+		background[i] = Sprite::create("parallax-space-backgound.png");
+		planet[i] = Sprite::create("parallax-space-big-planet.png");
+		planetsCorners[i] = Sprite::create("parallax-space-far-planets.png");
+		dust[i] = Sprite::create("parallax-space-stars.png");
+
+		background[i]->setScale(10);
+		planet[i]->setScale(10);
+		planetsCorners[i]->setScale(10);
+		dust[i]->setScale(10);
+
+		background[i]->setPosition(pos.x - background[i]->getContentSize().width * 20, pos.y);
+		planet[i]->setPosition(pos.x - planet[i]->getContentSize().width * 20, pos.y);
+		planetsCorners[i]->setPosition(pos.x - planetsCorners[i]->getContentSize().width * 20, pos.y);
+		dust[i]->setPosition(pos.x - dust[i]->getContentSize().width * 20, pos.y);
+
+		this->addChild(background[i], 0);
+		this->addChild(dust[i], 1);
+		this->addChild(planet[i], 2);
+		this->addChild(planetsCorners[i], 3);
+
+		pos.x += background[0]->getContentSize().width * 10;
+	}
+}
+
+void MidTerm::BackgroundMovement(float dt)
+{
+	for (int i = 0; i < PARALAXCOUNT; ++i)
+	{
+		background[i]->setPosition(background[i]->getPositionX() + 100 * dt, background[i]->getPositionY());
+		planet[i]->setPosition(planet[i]->getPositionX() + 50 * dt, planet[i]->getPositionY());
+		planetsCorners[i]->setPosition(planetsCorners[i]->getPositionX() + 20 * dt, planetsCorners[i]->getPositionY());
+		dust[i]->setPosition(dust[i]->getPositionX() + 100 * dt, dust[i]->getPositionY());
+
+		if (background[i]->getPositionX() - background[i]->getContentSize().width * 5 >= _screenPos.width)
+		{
+			background[i]->setPositionX(_origin.x - background[i]->getContentSize().width * 5);
+		}
+		if (planet[i]->getPositionX() - planet[i]->getContentSize().width * 5 >= _screenPos.width)
+		{
+			planet[i]->setPositionX(_origin.x - planet[i]->getContentSize().width * 5);
+		}
+		if (planetsCorners[i]->getPositionX() - planetsCorners[i]->getContentSize().width * 5 >= _screenPos.width)
+		{
+			planetsCorners[i]->setPositionX(_origin.x - planetsCorners[i]->getContentSize().width * 5);
+		}
+		if (dust[i]->getPositionX() - dust[i]->getContentSize().width * 5 >= _screenPos.width)
+		{
+			dust[i]->setPositionX(_origin.x - dust[i]->getContentSize().width * 5);
+		}
+	}
 }
 
 
