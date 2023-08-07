@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Boss.h"
 #include <math.h>
+#include "AudioEngine.h"
 
 #define ENEMIESCOUNT 30
 #define PARALAXCOUNT 3
@@ -62,7 +63,8 @@ private:
 	Sprite* planetsCorners[PARALAXCOUNT];
 	Sprite* dust[PARALAXCOUNT];
 
+	AudioEngine* audio;
+
 	void InitBackground(Vec2 pos);
 	void BackgroundMovement(float dt);
-	
 };

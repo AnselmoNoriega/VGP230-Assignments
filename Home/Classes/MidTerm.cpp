@@ -42,6 +42,7 @@ bool MidTerm::init()
 
 	InitBackground(centerOfScreen);
 
+	AudioEngine::play2d("DRIVE.mp3", true, 1.0f, nullptr);
 	//---------------------------------For Update----------------------------------------
 	this->scheduleUpdate();
 	InitKeyboardListener();
@@ -67,7 +68,6 @@ void MidTerm::update(float dt)
 			InitEnemies({ _screenPos.width / 2, _screenPos.height / 2 });
 		}
 	}
-
 }
 
 
