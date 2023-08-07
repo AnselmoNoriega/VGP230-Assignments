@@ -170,6 +170,11 @@ void MidTerm::InitBoss(Vec2 pos)
 
 	this->addChild(boss->healthBar, 10);
 	boss->healthBar->setPosition(pos.x, _screenPos.height - 100);
+
+	for (int i = 0; i < BULLETSNUM; ++i)
+	{
+		this->addChild(boss->bullets.bSprite[i], 10);
+	}
 }
 
 void MidTerm::Movements(float dt)
@@ -201,6 +206,7 @@ void MidTerm::Movements(float dt)
 
 	if (boss != nullptr)
 	{
+		boss->Movement(dt);
 		BossCollision(boss->GetSprite()->getPosition());
 	}
 }
@@ -218,6 +224,7 @@ void MidTerm::BossCollision(Vec2 bossPos)
 
 			if (boss->healthBar->getScaleX() <= 0)
 			{
+				boss->GetSprite()->setVisible(false);
 				delete[] boss;
 				boss = nullptr;
 			}
@@ -247,6 +254,21 @@ void MidTerm::EnemyCollision(Vec2 enemyPos, int enemyNum)
 
 void MidTerm::PlayerCollision()
 {
+	if (boss != nullptr)
+	{
+		if (!boss->bullets.bSprite[0]->isVisible()) return;
+
+		for (int i = 0; i < BULLETSNUM; ++i)
+		{
+			if (InsideBounds(GetBounds(boss->bullets.bSprite[i]->getPosition(), boss->bullets.bSprite[i]->getContentSize() * 2), GetBounds(player->GetSprite()->getPosition(), playerSize)))
+			{
+				Director::getInstance()->replaceScene(MidTerm::create());
+			}
+		}
+
+		return;
+	}
+
 	for (int i = 0; i < enemy.size(); ++i)
 	{
 		for (int j = 0; j < BULLETCOUNT; ++j)
