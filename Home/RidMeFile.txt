@@ -1,0 +1,6 @@
+The game is played only using A (to move right), D (to move Left) and space to shoot. However, if you press C, all box colliders will show.
+Every time you kill all enemies on screen (which takes one shot to kill them) you will pass to the next wave.
+However, there's a 10% chance that instead of getting to the next wave, a boss will appear. The main goal of this game is to kill the boss
+(which will kill you in one shot). If you kill the boss you win.
+You can only have 5 bullets on screen, if you try to shoot and the bullets haven't exited the screen nothing will happen.
+You only have 2 lives. if you lose one, your progress won't be lost and your health will regenerate. But this only apply in normal waves, if the boss kills you you will lose all progress
