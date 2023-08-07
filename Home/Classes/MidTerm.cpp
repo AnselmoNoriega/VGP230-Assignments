@@ -58,7 +58,7 @@ void MidTerm::update(float dt)
 	{
 		auto rand = random(1, 10);
 
-		if (rand != 5)
+		if (rand == 5)
 		{
 			InitBoss({ _origin.x + _screenPos.width / 2,  _screenPos.height - 400 });
 		}
@@ -175,6 +175,8 @@ void MidTerm::InitBoss(Vec2 pos)
 	{
 		this->addChild(boss->bullets.bSprite[i], 10);
 	}
+
+	this->addChild(boss->debug, 10);
 }
 
 void MidTerm::Movements(float dt)
@@ -208,6 +210,14 @@ void MidTerm::Movements(float dt)
 	{
 		boss->Movement(dt);
 		BossCollision(boss->GetSprite()->getPosition());
+
+		boss->debug->clear();
+
+		if (isColliderOn)
+		{
+			boss->debug->setLineWidth(5);
+			boss->DrawCollisionBox();
+		}
 	}
 }
 

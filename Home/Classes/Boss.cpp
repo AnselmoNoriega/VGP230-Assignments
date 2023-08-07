@@ -17,6 +17,14 @@ Boss::Boss(Vec2 pos, float bL, float bR, float bD)
 	speed = { 700, 300 };
 
 	timerShot = 3;
+
+	dx = sprite->getContentSize().width * 2.5;
+	dy = sprite->getContentSize().height * 2.5;
+	bx = bullets.bSprite[0]->getContentSize().width * 2.5;
+	by = bullets.bSprite[0]->getContentSize().height * 2.5;
+
+	color = Color4F::WHITE;
+	bulletColor = Color4F::MAGENTA;
 }
 
 void Boss::Movement(float dt)
@@ -60,6 +68,21 @@ void Boss::Shoot()
 		}
 
 		timerShot = 3;
+	}
+}
+
+void Boss::DrawCollisionBox()
+{
+	debug->drawRect(Vec2(sprite->getPositionX() - dx, sprite->getPositionY() + dy), Vec2(sprite->getPositionX() + dx, sprite->getPositionY() + dy),
+		Vec2(sprite->getPositionX() + dx, sprite->getPositionY() - dy), Vec2(sprite->getPositionX() - dx, sprite->getPositionY() - dy), color);
+
+	for (int i = 0; i < BULLETSNUM; ++i)
+	{
+		if (bullets.bSprite[i]->isVisible())
+		{
+			debug->drawRect(Vec2(bullets.bSprite[i]->getPositionX() - bx, bullets.bSprite[i]->getPositionY() + by), Vec2(bullets.bSprite[i]->getPositionX() + bx, bullets.bSprite[i]->getPositionY() + by),
+				Vec2(bullets.bSprite[i]->getPositionX() + bx, bullets.bSprite[i]->getPositionY() - by), Vec2(bullets.bSprite[i]->getPositionX() - bx, bullets.bSprite[i]->getPositionY() - by), bulletColor);
+		}
 	}
 }
 

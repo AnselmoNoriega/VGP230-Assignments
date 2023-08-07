@@ -9,8 +9,8 @@ Player::Player(Vec2 pos)
 	_left = false;
 	_right = false;
 
-	dx = sprite->getContentSize().width;
-	dy = sprite->getContentSize().height;
+	dx = sprite->getContentSize().width / 2;
+	dy = sprite->getContentSize().height / 2;
 	bx = lasers[0].GetSprite().first->getContentSize().width;
 	by = lasers[0].GetSprite().first->getContentSize().height;
 	color = Color4F::BLUE;

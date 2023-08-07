@@ -35,7 +35,13 @@ public:
 
 	void Shoot();
 
+	void DrawCollisionBox();
+
+	DrawNode* debug = DrawNode::create(5);
+
 	ThrustBullets bullets;
+
+
 
 private:
 	Sprite* sprite;
@@ -43,6 +49,14 @@ private:
 	float boundL;
 	float boundR;
 	float originY;
+
+	float dx;
+	float dy;
+	float bx;
+	float by;
+
+	Color4F color;
+	Color4F bulletColor;
 
 	float timerShot;
 };
