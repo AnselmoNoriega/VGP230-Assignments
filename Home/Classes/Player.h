@@ -45,6 +45,8 @@ public:
 	DrawNode* debug = DrawNode::create(5);
 	Sprite* health;
 
+	bool secondLiveActive;
+
 private:
 	Sprite* sprite;
 	float speed;

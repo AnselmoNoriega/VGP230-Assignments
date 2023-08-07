@@ -285,7 +285,12 @@ void MidTerm::PlayerCollision()
 			{
 				player->PlayerGotHit();
 				enemy[i]->lasers[j].GetSprite()->setVisible(false);
-				if (player->health->getScaleX() <= 0)
+				if (player->health->getScaleX() <= 0 && player->secondLiveActive)
+				{
+					player->health->setScaleX(4);
+					player->secondLiveActive = false;
+				}
+				else if (player->health->getScaleX() <= 0 && !player->secondLiveActive)
 				{
 					Director::getInstance()->replaceScene(LoseWindow::create());
 				}

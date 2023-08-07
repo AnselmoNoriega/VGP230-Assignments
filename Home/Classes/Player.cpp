@@ -17,7 +17,9 @@ Player::Player(Vec2 pos)
 	bulletColor = Color4F::YELLOW;
 	health = Sprite::create("bar_red.png");
 	health->setPosition(sprite->getPositionX(), sprite->getPositionY() - 100);
-	health->setScaleX(health->getScaleX() + 3);
+	health->setScaleX(4);
+
+	secondLiveActive = true;
 }
 
 Sprite* Player::GetSprite()
