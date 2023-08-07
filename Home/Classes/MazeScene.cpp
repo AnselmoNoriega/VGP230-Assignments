@@ -113,7 +113,7 @@ void MazeScene::setPosition(Sprite* spr, std::pair<int, int> newPosition, std::p
 bool MazeScene::canSetPosition(std::pair<int, int> p)
 {
 	auto flipP = FlipY(p);
-	return flipP.first >= 0 && flipP.second >= 0 && flipP.first < mapSize->width&& flipP.second < mapSize->height&& path->getTileAt({ (float)flipP.first, (float)flipP.second }) != NULL;
+	return flipP.first >= 0 && flipP.second >= 0 && flipP.first < mapSize->width && flipP.second < mapSize->height && path->getTileAt({ (float)flipP.first, (float)flipP.second }) != NULL;
 }
 
 void MazeScene::update(float dt)

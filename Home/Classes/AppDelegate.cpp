@@ -26,6 +26,7 @@
 #include "Assignment1.h"
 #include "Assignment2.h"
 #include "MazeScene.h"
+#include "MazeScene2.h"
 #include "MidTerm.h"
 #include "CollisionTestScene.h"
 
@@ -38,7 +39,7 @@ using namespace cocos2d::experimental;
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(1638, 1228);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
@@ -117,7 +118,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     //auto scene = Assignment2::createScene();
     //auto scene = CollisionTestScene::create();
     //auto scene = MazeScene::create();
-    auto scene = MidTerm::create();
+    auto scene = MazeScene2::create();
+    //auto scene = MidTerm::create();
 
     // run
     director->runWithScene(scene);
