@@ -58,7 +58,7 @@ void MidTerm::update(float dt)
 	{
 		auto rand = random(1, 10);
 
-		if (rand == 5)
+		if (rand != 5)
 		{
 			InitBoss({ _origin.x + _screenPos.width / 2,  _screenPos.height - 400 });
 		}
@@ -224,9 +224,7 @@ void MidTerm::BossCollision(Vec2 bossPos)
 
 			if (boss->healthBar->getScaleX() <= 0)
 			{
-				boss->GetSprite()->setVisible(false);
-				delete[] boss;
-				boss = nullptr;
+				Director::getInstance()->replaceScene(VictoryScene::create());
 			}
 		}
 	}
@@ -262,7 +260,7 @@ void MidTerm::PlayerCollision()
 		{
 			if (InsideBounds(GetBounds(boss->bullets.bSprite[i]->getPosition(), boss->bullets.bSprite[i]->getContentSize() * 2), GetBounds(player->GetSprite()->getPosition(), playerSize)))
 			{
-				Director::getInstance()->replaceScene(MidTerm::create());
+				Director::getInstance()->replaceScene(LoseWindow::create());
 			}
 		}
 
@@ -279,7 +277,7 @@ void MidTerm::PlayerCollision()
 				enemy[i]->lasers[j].GetSprite()->setVisible(false);
 				if (player->health->getScaleX() <= 0)
 				{
-					Director::getInstance()->replaceScene(MidTerm::create());
+					Director::getInstance()->replaceScene(LoseWindow::create());
 				}
 			}
 		}

@@ -1,5 +1,7 @@
 #pragma once
 #include "cocos2d.h"
+#include "LoseWindow.h"
+#include "VictoryScene.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Boss.h"
