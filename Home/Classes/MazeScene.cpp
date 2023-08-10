@@ -1,5 +1,10 @@
 #include "MazeScene.h"
 
+cocos2d::Scene* MazeScene::createScene()
+{
+	return MazeScene::create();
+}
+
 bool MazeScene::init()
 {
 	auto map = TMXTiledMap::create("tmx/desert.tmx");

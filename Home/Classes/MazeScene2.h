@@ -61,6 +61,8 @@ inline decltype(auto) operator+=(Vec2& v, P const& p)
 class MazeScene2 : public MazeScene
 {
 public:
+	static cocos2d::Scene* createScene();
+
 	virtual bool init();
 
 	virtual void update(float dt);

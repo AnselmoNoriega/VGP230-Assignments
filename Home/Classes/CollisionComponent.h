@@ -9,6 +9,7 @@ USING_NS_CC;
 class CollisionComponent : public Component
 {
 public:
+
   enum Type
   {
     Circle = (1 << 0),

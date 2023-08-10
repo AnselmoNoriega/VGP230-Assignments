@@ -59,7 +59,7 @@ void MidTerm::update(float dt)
 	{
 		auto rand = random(1, 10);
 
-		if (rand == 5)
+		if (rand != 5)
 		{
 			InitBoss({ _origin.x + _screenPos.width / 2,  _screenPos.height - 400 });
 		}

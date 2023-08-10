@@ -1,5 +1,10 @@
 #include "MazeScene2.h"
 
+cocos2d::Scene* MazeScene2::createScene()
+{
+	return MazeScene2::create();
+}
+
 bool MazeScene2::init()
 {
 	if (!MazeScene::init())
@@ -67,9 +72,10 @@ void MazeScene2::update(float dt)
 
 int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& target, int depth)
 {
-	auto& [x1, y1] = current;
-
-	if (dfsVisited[x1][y1] || !canSetPosition(current))
+	auto& [x1, y1] = FlipY(current);
+	auto& [a1, b1] = current;
+	return -1;
+	if (!canSetPosition(current) || dfsVisited[x1][y1])
 	{
 		return -1;
 	}
@@ -79,15 +85,17 @@ int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& targe
 
 	if (current == target)
 	{
+		dfsPath[depth] = current;
 		return depth;
 	}
 
-	std::pair<int, int> adjacentCells[4] = { {x1 + 1, y1}, {x1 - 1, y1} , {x1, y1 + 1} , {x1, y1 - 1} };
+	std::pair<int, int> adjacentCells[4] = { {a1 + 1, b1}, {a1 - 1, b1} , {a1, b1 + 1} , {a1, b1 - 1} };
 
 	for (auto& adjacentCell : adjacentCells)
 	{
-		if (auto length = dfs(adjacentCell, target, depth) != -1)
+		if (int length = dfs(adjacentCell, target, depth) != -1)
 		{
+			dfsPath[depth] = current;
 			return length;
 		}
 	}
@@ -114,6 +122,7 @@ bool MazeScene2::bfs(std::pair<int, int> current, std::pair<int, int>const& targ
 
 		parents = children;
 	}*/
+	return false;
 }
 
 bool MazeScene2::bfsVisitChild(std::pair<int, int> const& parent, std::pair<int, int> const& c, std::pair<int, int> const& t, std::vector<std::pair<int, int>>& children)
