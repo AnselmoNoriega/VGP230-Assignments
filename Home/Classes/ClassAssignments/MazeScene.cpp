@@ -91,7 +91,7 @@ void MazeScene::initialize(Sprite* spr, TMXLayer* layer, std::pair<int, int>& po
 	}
 }
 
-std::pair<int, int> MazeScene::FlipY(std::pair<int, int> position)
+const std::pair<int, int> MazeScene::FlipY(std::pair<int, int> const position)
 {
 	return std::make_pair(position.first, mapSize->height - position.second - 1);
 }

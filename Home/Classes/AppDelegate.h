@@ -26,12 +26,12 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
-#include "Assignment1.h"
-#include "Assignment2.h"
-#include "MazeScene.h"
-#include "MazeScene2.h"
-#include "MidTerm.h"
-#include "CollisionTestScene.h"
+#include "Assignment1/Assignment1.h"
+#include "Assignment2/Assignment2.h"
+#include "ClassAssignments/MazeScene.h"
+#include "ClassAssignments/MazeScene2.h"
+#include "ClassAssignments/CollisionTestScene.h"
+#include "MidTerm/MidTerm.h"
 
  /**
  @brief    The cocos2d Application.
@@ -72,10 +72,11 @@ private:
 	std::vector<Scene* (*)()> scenes
 	{
 		Assignment1::createScene,
-	    Assignment2::createScene,
+		Assignment2::createScene,
 		MazeScene::createScene,
 		MazeScene2::createScene,
-
+		CollisionTestScene::createScene,
+		MidTerm::createScene
 	};
 
 	int currentScene = 0;

@@ -32,10 +32,10 @@ private:
 	void InitKeyboardListener();
 
 	//-------------------PlayerHelpers-------------------------
-	Player* player;
-	std::vector<Enemy*> enemy;
+	std::unique_ptr<Player> player;
+	std::vector< std::unique_ptr<Enemy>> enemy;
 	int bulletIndex;
-	Boss* boss;
+	std::unique_ptr<Boss> boss;
 
 	void InitBullets();
 	int GetIndex();
@@ -62,8 +62,6 @@ private:
 	Sprite* planet[PARALAXCOUNT];
 	Sprite* planetsCorners[PARALAXCOUNT];
 	Sprite* dust[PARALAXCOUNT];
-
-	AudioEngine* audio;
 
 	void InitBackground(Vec2 pos);
 	void BackgroundMovement(float dt);

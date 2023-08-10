@@ -15,7 +15,7 @@ public:
 
 	void initialize(Sprite* spr, TMXLayer* layer, std::pair<int, int>& position, bool draw = true);
 
-	std::pair<int, int> FlipY(std::pair<int, int> position);
+	const std::pair<int, int> FlipY(std::pair<int, int> const position);
 
 	void setPosition(Sprite* spr, std::pair<int, int> playerPosition, std::pair<int, int>& oldPosition, bool draw = true);
 

@@ -2,6 +2,11 @@
 #include "CollisionComponent.h"
 
 
+cocos2d::Scene* CollisionTestScene::createScene()
+{
+	return CollisionTestScene::create();
+}
+
 bool CollisionTestScene::init()
 {
 

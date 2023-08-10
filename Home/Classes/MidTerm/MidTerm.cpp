@@ -24,7 +24,7 @@ bool MidTerm::init()
 	auto playerPosition = Vec2(_screenPos.width / 2, _screenPos.height / 10);
 
 	//----------------------------------Game Objects Init----------------------------------
-	player = new Player(playerPosition);
+	player = std::make_unique<Player>(playerPosition);
 	this->addChild(player->GetSprite(), 10);
 	this->addChild(player->debug, 10);
 	this->addChild(player->health, 10);
@@ -142,7 +142,7 @@ void MidTerm::InitEnemies(Vec2 pos)
 	auto size = random(5, ENEMIESCOUNT);
 	Vec2 initPos = pos;
 	Vec2 speed = { 700, 100 };
-	enemy.resize(size, nullptr);
+	enemy.reserve(ENEMIESCOUNT);
 
 	for (int i = 0; i < size; ++i)
 	{
@@ -150,7 +150,7 @@ void MidTerm::InitEnemies(Vec2 pos)
 		initPos.y += 10;
 		speed = { random(400.0f, 1000.0f), random(0.0f, 200.0f) };
 
-		enemy[i] = new Enemy(initPos, speed);
+		enemy.push_back(std::make_unique<Enemy>(initPos, speed));
 
 		this->addChild(enemy[i]->GetSprite(), 10);
 		this->addChild(enemy[i]->debug, 10);
@@ -164,7 +164,7 @@ void MidTerm::InitEnemies(Vec2 pos)
 
 void MidTerm::InitBoss(Vec2 pos)
 {
-	boss = new Boss(pos, _origin.x, _screenPos.width, _origin.y);
+	boss = std::make_unique<Boss>(pos, _origin.x, _screenPos.width, _origin.y);
 	this->addChild(boss->GetSprite(), 10);
 	bossSize = boss->GetSprite()->getContentSize() * 2.5;
 
@@ -253,7 +253,6 @@ void MidTerm::EnemyCollision(Vec2 enemyPos, int enemyNum)
 			enemy[enemyNum]->lasers[0].GetSprite()->setVisible(false);
 			enemy[enemyNum]->lasers[1].GetSprite()->setVisible(false);
 			enemy[enemyNum]->debug->clear();
-			delete enemy[enemyNum];
 			enemy[enemyNum] = nullptr;
 			enemy.erase(enemy.begin() + enemyNum);
 		}

@@ -106,13 +106,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	register_all_packages();
 
-	// create a scene. it's an autorelease object
-	//auto scene = HelloWorld::createScene();
-	//auto scene = Assignment1::createScene();
-	//auto scene = Assignment2::createScene();
-	//auto scene = CollisionTestScene::create();
-	//auto scene = MazeScene::create();
-	//auto scene = MazeScene2::create();
 	auto scene = scenes[currentScene]();
 
 	auto keyboardListener = EventListenerKeyboard::create();
@@ -128,6 +121,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 				currentScene = 0;
 			}
 
+			AudioEngine::stopAll();
 			Director::getInstance()->replaceScene(scenes[currentScene]());
 			break;
 		}
@@ -139,6 +133,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 				currentScene = scenes.size() - 1;
 			}
 
+			AudioEngine::stopAll();
 			Director::getInstance()->replaceScene(scenes[currentScene]());
 			break;
 		}
