@@ -54,6 +54,7 @@ private:
 	Sprite* cheese;
 
 	std::vector<MazeEnemy> enemies;
+	bool isPlayerMoving;
 
 	float cheeseAnimationTimer = 0;
 

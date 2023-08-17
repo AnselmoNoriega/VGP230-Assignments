@@ -132,6 +132,7 @@ bool MazeScene::canSetPosition(std::pair<int, int> p)
 void MazeScene::update(float dt)
 {
 	/// TODO: Check if game state is running
+	isPlayerMoving = false;
 
 	if (gameState == Running)
 	{
@@ -147,6 +148,8 @@ void MazeScene::update(float dt)
 				/// TODO: call Change Active Sprite
 				setPosition(active, p, playerPosition);
 			}
+
+			isPlayerMoving = true;
 		}
 		else if (left)
 		{
@@ -160,6 +163,8 @@ void MazeScene::update(float dt)
 				/// TODO: call Change Active Sprite
 				setPosition(active, p, playerPosition);
 			}
+
+			isPlayerMoving = true;
 		}
 		else if (up)
 		{
@@ -172,6 +177,8 @@ void MazeScene::update(float dt)
 			{
 				setPosition(active, p, playerPosition);
 			}
+
+			isPlayerMoving = true;
 		}
 		else if (right)
 		{
@@ -185,6 +192,8 @@ void MazeScene::update(float dt)
 				/// TODO: call Change Active Sprite
 				setPosition(active, p, playerPosition);
 			}
+
+			isPlayerMoving = true;
 		}
 
 		if (playerPosition == endPosition)
@@ -204,6 +213,11 @@ void MazeScene::update(float dt)
 	}
 
 	ResetInput();
+
+	if (isPlayerMoving && enemies[0].Move(path, playerPosition))
+	{
+		setPosition(enemies[0].GetSprite(), enemies[0].newPos, enemies[0].enemyPos);
+	}
 }
 
 void MazeScene::changeActiveSprite(Sprite* newActive)
