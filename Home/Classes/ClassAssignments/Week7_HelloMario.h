@@ -39,10 +39,9 @@ private:
     Falling
   } animationState = Idle;
 
-  Vector<SpriteFrame*> idleFrames;
-  Vector<SpriteFrame*> walkingFrames;
-  Vector<SpriteFrame*> jumpingFrames;
-  Vector<SpriteFrame*> fallingFrames;
+  void ChangeAnim(AnimationState anim);
+
+  Animation* anims[4];
   Sprite* mario;
   PhysicsBody* marioPhysicsBody;
   std::vector<PhysicsBody*> contacts;
