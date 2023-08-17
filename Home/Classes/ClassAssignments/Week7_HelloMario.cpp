@@ -34,22 +34,17 @@ bool HelloMario::init()
 	this->addChild(level);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mario.plist");
-	auto walkingFrames = getAnimation("mario_walk_%02d", 3);
-	auto idleFrames = getAnimation("mario_idle_%02d", 2);
-	auto fallingFrames = getAnimation("mario_fall_%02d", 1);
-	auto jumpingFrames = getAnimation("mario_jump_%02d", 1);
+	animFrames[0] = getAnimation("mario_idle_%02d", 2);
+	animFrames[1] = getAnimation("mario_walk_%02d", 3);
+	animFrames[2] = getAnimation("mario_fall_%02d", 1);
+	animFrames[3] = getAnimation("mario_jump_%02d", 1);
 
-	anims[0] = Animation::createWithSpriteFrames(idleFrames, 1.0f);
-	anims[1] = Animation::createWithSpriteFrames(walkingFrames, 1.0f);
-	anims[2] = Animation::createWithSpriteFrames(jumpingFrames, 1.0f);
-	anims[3] = Animation::createWithSpriteFrames(fallingFrames, 1.0f);
-
-	mario = Sprite::createWithSpriteFrame(idleFrames.front());
+	mario = Sprite::createWithSpriteFrame(animFrames[0].front());
 	addChild(mario);
 	mario->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 	mario->setScale(2);
 
-	mario->runAction(RepeatForever::create(Animate::create(anims[0])));
+	mario->runAction(RepeatForever::create(Animate::create(Animation::createWithSpriteFrames(animFrames[0], 1.0f))));
 
 	controller = KeyboardControllerComponent::create(KeyboardControllerComponent::WASD);
 	mario->addComponent(controller);
@@ -141,13 +136,13 @@ void HelloMario::InitPhysics(TMXTiledMap* level)
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
-void HelloMario::ChangeAnim(AnimationState anim)
+void HelloMario::ChangeAnim(AnimationState anim, float speed)
 {
 	if (anim != animationState)
 	{
 		animationState = anim;
 		mario->stopAllActions();
-		mario->runAction(RepeatForever::create(Animate::create(anims[(int)anim])));
+		mario->runAction(RepeatForever::create(Animate::create(Animation::createWithSpriteFrames(animFrames[(int)anim], speed))));
 	}
 }
 
@@ -161,12 +156,12 @@ void HelloMario::update(float dt)
 
 		if (controller->IsLeftPressed())
 		{
-			//ChangeAnim(AnimationState::Walking);
+			ChangeAnim(AnimationState::Walking, 2.0f);
 			movingSpeed -= 200;
 		}
 		if (controller->IsRightPressed())
 		{
-			//ChangeAnim(AnimationState::Walking);
+			ChangeAnim(AnimationState::Walking, 2.0f);
 			movingSpeed += 200;
 		}
 
@@ -178,7 +173,7 @@ void HelloMario::update(float dt)
 
 		if (controller->IsUpPressed())
 		{
-			//ChangeAnim(AnimationState::Jumping);
+			ChangeAnim(AnimationState::Jumping, 1.0f);
 			marioPhysicsBody->applyImpulse({ 0, 400 });
 		}
 
@@ -205,7 +200,7 @@ void HelloMario::update(float dt)
 
 		if (animationState != Falling && mario->getPhysicsBody()->getVelocity().y < 0)
 		{
-			/// change animation to falling animation
+			ChangeAnim(AnimationState::Idle, 1.0f);
 		}
 	}
 
