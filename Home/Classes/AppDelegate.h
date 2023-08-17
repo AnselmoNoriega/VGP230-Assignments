@@ -32,6 +32,7 @@
 #include "ClassAssignments/MazeScene2.h"
 #include "ClassAssignments/CollisionTestScene.h"
 #include "MidTerm/MidTerm.h"
+#include "ClassAssignments/Week7_HelloMario.h"
 
  /**
  @brief    The cocos2d Application.
@@ -71,6 +72,7 @@ private:
 
 	std::vector<Scene* (*)()> scenes
 	{
+		HelloMario::createScene,
 		Assignment1::createScene,
 		Assignment2::createScene,
 		MazeScene::createScene,
