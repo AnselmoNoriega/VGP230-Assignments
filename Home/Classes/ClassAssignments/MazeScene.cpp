@@ -28,6 +28,8 @@ bool MazeScene::init()
 	ratLeft = Sprite::create("mouse-9.png");   //9, 10, 11
 	ratLeft->setVisible(false);
 
+	//enemy = Sprite::create("mouse-9.png");
+
 	cheese = Sprite::create("Cheese.png");
 
 	drawNode = DrawNode::create(10);
@@ -36,6 +38,7 @@ bool MazeScene::init()
 	map->addChild(ratRight, 5);
 	map->addChild(ratDown, 5);
 	map->addChild(ratLeft, 5);
+	//map->addChild(enemy, 5);
 	map->addChild(drawNode, 4);
 	map->addChild(cheese, 4);
 
@@ -67,6 +70,7 @@ bool MazeScene::init()
 
 	initialize(active, playerStartLayer, playerPosition);
 	initialize(cheese, playerEndLayer, endPosition, false);
+	//setPosition(enemy, {10, 2}, enemyPos);
 
 	playerStartLayer->setVisible(false);
 	playerEndLayer->setVisible(false);

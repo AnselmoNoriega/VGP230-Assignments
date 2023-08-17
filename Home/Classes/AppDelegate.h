@@ -72,11 +72,11 @@ private:
 
 	std::vector<Scene* (*)()> scenes
 	{
+		MazeScene2::createScene,
 		HelloMario::createScene,
 		Assignment1::createScene,
 		Assignment2::createScene,
 		MazeScene::createScene,
-		MazeScene2::createScene,
 		CollisionTestScene::createScene,
 		MidTerm::createScene
 	};
