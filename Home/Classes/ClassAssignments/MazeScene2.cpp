@@ -19,7 +19,7 @@ bool MazeScene2::init()
 		dfsVisited[i].resize((int)mapSize->height);
 	}
 
-	dfsPath.reserve((int)mapSize->width * (int)mapSize->height);
+	dfsPath.resize((int)mapSize->width * (int)mapSize->height);
 
 	bfsVisited.resize((int)mapSize->width);
 
@@ -74,7 +74,7 @@ int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& targe
 {
 	auto& [x1, y1] = FlipY(current);
 	auto& [a1, b1] = current;
-	return -1;
+
 	if (!canSetPosition(current) || dfsVisited[x1][y1])
 	{
 		return -1;
@@ -85,7 +85,7 @@ int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& targe
 
 	if (current == target)
 	{
-		dfsPath[depth] = current;
+		dfsPath.push_back({x1, y1});
 		return depth;
 	}
 
@@ -95,7 +95,7 @@ int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& targe
 	{
 		if (int length = dfs(adjacentCell, target, depth) != -1)
 		{
-			dfsPath[depth] = current;
+			dfsPath.push_back({ x1, y1 });
 			return length;
 		}
 	}
