@@ -77,8 +77,6 @@ private:
 	bool bfs(std::pair<int, int> current, std::pair<int, int>const& target);
 	bool bfsVisitChild(std::pair<int, int> const& parent, std::pair<int, int> const& c, std::pair<int, int> const& t, std::vector<std::pair<int, int>>& children);
 
-	void MakePath();
-
 	void bfsBacktrack();
 
 	std::vector<std::vector<std::pair<int, int>>> bfsVisited;

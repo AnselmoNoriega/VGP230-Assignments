@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "MazeEnemy.h"
 
 USING_NS_CC;
 
@@ -51,6 +52,8 @@ private:
 	Sprite* ratUp;
 	Sprite* ratRight;
 	Sprite* cheese;
+
+	std::vector<MazeEnemy> enemies;
 
 	float cheeseAnimationTimer = 0;
 

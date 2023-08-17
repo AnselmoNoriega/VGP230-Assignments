@@ -28,7 +28,7 @@ bool MazeScene::init()
 	ratLeft = Sprite::create("mouse-9.png");   //9, 10, 11
 	ratLeft->setVisible(false);
 
-	//enemy = Sprite::create("mouse-9.png");
+	enemies.push_back(MazeEnemy(Sprite::create("mouse-0.png"), cocos2d::Color3B::BLUE, mapSize));
 
 	cheese = Sprite::create("Cheese.png");
 
@@ -38,9 +38,13 @@ bool MazeScene::init()
 	map->addChild(ratRight, 5);
 	map->addChild(ratDown, 5);
 	map->addChild(ratLeft, 5);
-	//map->addChild(enemy, 5);
 	map->addChild(drawNode, 4);
 	map->addChild(cheese, 4);
+
+	for (int i = 0; i < enemies.size(); ++i)
+	{
+		map->addChild(enemies[i].GetSprite(), 5);
+	}
 
 	active = ratRight;
 
@@ -70,7 +74,7 @@ bool MazeScene::init()
 
 	initialize(active, playerStartLayer, playerPosition);
 	initialize(cheese, playerEndLayer, endPosition, false);
-	//setPosition(enemy, {10, 2}, enemyPos);
+	setPosition(enemies[0].GetSprite(), {10, 3}, enemies[0].enemyPos);
 
 	playerStartLayer->setVisible(false);
 	playerEndLayer->setVisible(false);
