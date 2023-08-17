@@ -156,12 +156,14 @@ void HelloMario::update(float dt)
 
 		if (controller->IsLeftPressed())
 		{
-			ChangeAnim(AnimationState::Walking, 2.0f);
+			ChangeAnim(AnimationState::Walking, 0.1f);
+			if (!mario->isFlippedX())mario->setFlippedX(true);
 			movingSpeed -= 200;
 		}
 		if (controller->IsRightPressed())
 		{
-			ChangeAnim(AnimationState::Walking, 2.0f);
+			ChangeAnim(AnimationState::Walking, 0.1f);
+			if(mario->isFlippedX())mario->setFlippedX(false);
 			movingSpeed += 200;
 		}
 
@@ -179,8 +181,7 @@ void HelloMario::update(float dt)
 
 		if (!controller->IsLeftPressed() && !controller->IsRightPressed() && !controller->IsDownPressed() && !controller->IsUpPressed())
 		{
-			/// TODO:
-			/// switch to idle animation
+			ChangeAnim(AnimationState::Idle, 1.0f);
 		}
 	}
 	else
@@ -200,7 +201,7 @@ void HelloMario::update(float dt)
 
 		if (animationState != Falling && mario->getPhysicsBody()->getVelocity().y < 0)
 		{
-			ChangeAnim(AnimationState::Idle, 1.0f);
+			//ChangeAnim(AnimationState::Idle, 1.0f);
 		}
 	}
 
