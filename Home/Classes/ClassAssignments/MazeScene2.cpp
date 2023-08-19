@@ -46,12 +46,13 @@ void MazeScene2::update(float dt)
 		{
 			drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
 			drawPath(dfsPath, { 0.0f, 0.0f }, Color4F::RED);
-			drawPath(enemies[0].bfsPath, {0.0f, 0.0f}, Color4F::BLUE);
 		}
 		else
 		{
 			drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
 		}
+
+		drawPath(enemies[0].bfsPath, { 0.0f, 0.0f }, Color4F::BLUE);
 	}
 	else
 	{

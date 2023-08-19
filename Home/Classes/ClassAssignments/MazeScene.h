@@ -46,6 +46,7 @@ private:
 	} gameState = Start;
 
 	TMXLayer* collision;
+	TMXLayer* playerStartLayer;
 
 	Sprite* active;
 	Sprite* ratDown;
@@ -55,10 +56,12 @@ private:
 	Sprite* cheese;
 
 	bool isPlayerMoving;
+	int playerLives;
 
 	float cheeseAnimationTimer = 0;
 
 	void ResetInput();
+	void PlayerHit();
 
 	bool down = false;
 	bool left = false;

@@ -1,4 +1,5 @@
 #include "MazeScene.h"
+#include "LW.h"
 
 cocos2d::Scene* MazeScene::createScene()
 {
@@ -10,7 +11,7 @@ bool MazeScene::init()
 	auto map = TMXTiledMap::create("tmx/desert.tmx");
 	path = map->getLayer("Path");
 	collision = map->getLayer("Collision");
-	auto playerStartLayer = map->getLayer("Player");
+	playerStartLayer = map->getLayer("Player");
 	auto playerEndLayer = map->getLayer("Player End");
 
 	mapSize = &path->getLayerSize();
@@ -78,6 +79,7 @@ bool MazeScene::init()
 
 	playerStartLayer->setVisible(false);
 	playerEndLayer->setVisible(false);
+	playerLives = 3;
 
 	gameState = Running;
 
@@ -133,6 +135,11 @@ void MazeScene::update(float dt)
 {
 	/// TODO: Check if game state is running
 	isPlayerMoving = false;
+
+	if (enemies[0].enemyPos == playerPosition)
+	{
+		PlayerHit();
+	}
 
 	if (gameState == Running)
 	{
@@ -238,5 +245,17 @@ void MazeScene::ResetInput()
 	left = false;
 	up = false;
 	right = false;
+}
+
+void MazeScene::PlayerHit()
+{
+	changeActiveSprite(ratRight);
+	initialize(active, playerStartLayer, playerPosition);
+	--playerLives;
+
+	if (playerLives <= 0)
+	{
+		Director::getInstance()->replaceScene(LW::createScene());
+	}
 }
 
