@@ -6,14 +6,12 @@ MazeEnemy::MazeEnemy(cocos2d::Sprite* sprite, cocos2d::Color3B color, const coco
 {
 	mSprite->setColor(color);
 
-	dfsVisited.resize((int)mapSize->width);
+	bfsVisited.resize((int)mapSize->width);
 
 	for (int i = 0; i < (int)mapSize->width; ++i)
 	{
-		dfsVisited[i].resize((int)mapSize->height);
+		bfsVisited[i].resize((int)mapSize->height);
 	}
-
-	dfsPath.resize((int)mapSize->width * (int)mapSize->height);
 }
 
 cocos2d::Sprite* MazeEnemy::GetSprite()
@@ -25,19 +23,27 @@ bool MazeEnemy::Move(cocos2d::TMXLayer* path, std::pair<int, int> const& target)
 {
 	bool found = false;
 
-	if (DFSPath(enemyPos, target, 0, path) != -1 && dfsPath.size() >= 2)
+	if (BFSPath(enemyPos, target, path) && bfsPath.size() >= 2)
 	{
-		newPos = FlipY(dfsPath.at(dfsPath.size() - 2));
+		std::unique_ptr<TileNode> currentNode;
+		currentNode = std::move(nodes.front());
+
+		while (currentNode->parent)
+		{
+			bfsPath.push_back(FlipY(currentNode->pos));
+			currentNode = std::move(currentNode->parent);
+		}
+		newPos = FlipY(bfsPath.at(bfsPath.size() - 2));
 		found = true;
 	}
 
-	dfsPath.clear();
+	bfsPath.clear();
 
 	for (int i = 0; i < mapSize->width; ++i)
 	{
 		for (int j = 0; j < mapSize->height; ++j)
 		{
-			dfsVisited[i][j] = false;
+			bfsVisited[i][j] = false;
 		}
 	}
 	return found;
@@ -54,36 +60,48 @@ bool MazeEnemy::canSetPosition(std::pair<int, int> playerPosition, cocos2d::TMXL
 	return flipP.first >= 0 && flipP.second >= 0 && flipP.first < mapSize->width && flipP.second < mapSize->height && path->getTileAt({ (float)flipP.first, (float)flipP.second }) != NULL;
 }
 
-int MazeEnemy::DFSPath(std::pair<int, int> current, std::pair<int, int> const& target, int depth, cocos2d::TMXLayer* path)
+bool MazeEnemy::BFSPath(std::pair<int, int> current, std::pair<int, int> const& target, cocos2d::TMXLayer* path)
 {
-	auto& [x1, y1] = FlipY(current);
-	auto& [a1, b1] = current;
+	nodes.clear();
+	std::pair<int, int> p = FlipY(current);
+	std::unique_ptr<TileNode> currentNode(std::make_unique<TileNode>(current, nullptr));
 
-	if (!canSetPosition(current, path) || dfsVisited[x1][y1])
+	nodes.push_back(currentNode);
+	bfsVisited[p.first][p.second] = true;
+
+	while (!nodes.empty())
 	{
-		return -1;
-	}
+		currentNode = std::move(nodes.front());
+		nodes.pop_front();
 
-	dfsVisited[x1][y1] = true;
-	++depth;
-
-	if (current == target)
-	{
-		dfsPath.push_back({ x1, y1 });
-		return depth;
-	}
-
-	std::pair<int, int> adjacentCells[4] = { {a1 + 1, b1}, {a1 - 1, b1} , {a1, b1 + 1} , {a1, b1 - 1} };
-
-	for (auto& adjacentCell : adjacentCells)
-	{
-		if (int length = DFSPath(adjacentCell, target, depth, path) != -1)
+		if (currentNode->pos == target)
 		{
-			dfsPath.push_back({ x1, y1 });
-			return length;
+			return true;
+		}
+		else
+		{
+			std::pair<int, int> adjacentCells[4] = { 
+				{currentNode->pos.first + 1, currentNode->pos.second}, 
+				{currentNode->pos.first - 1, currentNode->pos.second},
+				{currentNode->pos.first, currentNode->pos.second + 1},
+				{currentNode->pos.first, currentNode->pos.second - 1} 
+			};
+
+			for (auto& cell : adjacentCells)
+			{
+				p = FlipY(cell);
+				if (!canSetPosition(cell, path) || bfsVisited[p.first][p.second])
+				{
+					continue;
+				}
+
+				nodes.push_back(std::make_unique<TileNode>(cell, currentNode));
+				bfsVisited[p.first][p.second] = true;
+			}
 		}
 	}
 
-	return -1;
+
+	return false;
 }
 
