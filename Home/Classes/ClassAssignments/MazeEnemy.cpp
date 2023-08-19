@@ -1,5 +1,5 @@
 #include "MazeEnemy.h"
-#include "MazeScene.h"
+#include "MazeScene2.h"
 
 MazeEnemy::MazeEnemy(cocos2d::Sprite* sprite, cocos2d::Color3B color, const cocos2d::Size* worldSize)
 	:mSprite(sprite), mapSize(worldSize)
@@ -22,22 +22,25 @@ cocos2d::Sprite* MazeEnemy::GetSprite()
 bool MazeEnemy::Move(cocos2d::TMXLayer* path, std::pair<int, int> const& target)
 {
 	bool found = false;
+	bfsPath.clear();
 
-	if (BFSPath(enemyPos, target, path) && bfsPath.size() >= 2)
+	if (BFSPath(enemyPos, target, path))
 	{
-		std::unique_ptr<TileNode> currentNode;
+		std::shared_ptr<TileNode> currentNode;
 		currentNode = std::move(nodes.front());
 
-		while (currentNode->parent)
+		while (currentNode)
 		{
 			bfsPath.push_back(FlipY(currentNode->pos));
 			currentNode = std::move(currentNode->parent);
 		}
-		newPos = FlipY(bfsPath.at(bfsPath.size() - 2));
-		found = true;
+		if (bfsPath.size() >= 2)
+		{
+			newPos = FlipY(bfsPath.at(bfsPath.size() - 2));
+			found = true;
+		}
 	}
 
-	bfsPath.clear();
 
 	for (int i = 0; i < mapSize->width; ++i)
 	{
@@ -64,7 +67,7 @@ bool MazeEnemy::BFSPath(std::pair<int, int> current, std::pair<int, int> const& 
 {
 	nodes.clear();
 	std::pair<int, int> p = FlipY(current);
-	std::unique_ptr<TileNode> currentNode(std::make_unique<TileNode>(current, nullptr));
+	std::shared_ptr<TileNode> currentNode(std::make_unique<TileNode>(current, nullptr));
 
 	nodes.push_back(currentNode);
 	bfsVisited[p.first][p.second] = true;
@@ -76,15 +79,16 @@ bool MazeEnemy::BFSPath(std::pair<int, int> current, std::pair<int, int> const& 
 
 		if (currentNode->pos == target)
 		{
+			nodes.push_front(std::move(currentNode));
 			return true;
 		}
 		else
 		{
-			std::pair<int, int> adjacentCells[4] = { 
-				{currentNode->pos.first + 1, currentNode->pos.second}, 
+			std::pair<int, int> adjacentCells[4] = {
+				{currentNode->pos.first + 1, currentNode->pos.second},
 				{currentNode->pos.first - 1, currentNode->pos.second},
 				{currentNode->pos.first, currentNode->pos.second + 1},
-				{currentNode->pos.first, currentNode->pos.second - 1} 
+				{currentNode->pos.first, currentNode->pos.second - 1}
 			};
 
 			for (auto& cell : adjacentCells)
@@ -105,3 +109,12 @@ bool MazeEnemy::BFSPath(std::pair<int, int> current, std::pair<int, int> const& 
 	return false;
 }
 
+template<typename T>
+T toScreenSpaceT(std::pair<int, int>const& position)
+{
+	return
+	{
+	  tileSize->width * (float)position.first,
+	  tileSize->height * (float)((int)mapSize->height - position.second - 1)
+	};
+}

@@ -34,6 +34,7 @@ public:
 
 	TMXLayer* path;
 	DrawNode* drawNode;
+	std::vector<MazeEnemy> enemies;
 
 private:
 	enum GameState
@@ -53,7 +54,6 @@ private:
 	Sprite* ratRight;
 	Sprite* cheese;
 
-	std::vector<MazeEnemy> enemies;
 	bool isPlayerMoving;
 
 	float cheeseAnimationTimer = 0;

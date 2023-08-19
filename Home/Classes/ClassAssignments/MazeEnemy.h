@@ -12,13 +12,14 @@ public:
 	std::pair<int, int> enemyPos;
 	std::pair<int, int> newPos;
 
+	std::vector<std::pair<int, int>> bfsPath;
 private:
 	struct TileNode
 	{
-		TileNode(std::pair<int, int> tPos, TileNode& father): pos(tPos), parent(father)
+		TileNode(std::pair<int, int> tPos, std::shared_ptr<TileNode> father): pos(tPos), parent(father)
 		{}
 		std::pair<int, int> pos;
-		std::unique_ptr<TileNode> parent = nullptr;
+		std::shared_ptr<TileNode> parent;
 	};
 
 	const std::pair<int, int> FlipY(std::pair<int, int> const position);
@@ -28,8 +29,7 @@ private:
 
 	cocos2d::Sprite* mSprite;
 	std::vector<std::vector<bool>> bfsVisited;
-	std::vector<std::pair<int, int>> bfsPath;
 	const cocos2d::Size* mapSize;
-	std::deque<std::unique_ptr<TileNode>> nodes;
+	std::deque<std::shared_ptr<TileNode>> nodes;
 
 };
