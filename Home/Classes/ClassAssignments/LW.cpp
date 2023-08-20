@@ -1,4 +1,5 @@
 #include "LW.h"
+#include "MazeScene2.h"
 
 USING_NS_CC;
 
@@ -46,8 +47,8 @@ void LW::InitKeyboardListener()
 	{
 		switch (keyCode)
 		{
-		case EventKeyboard::KeyCode::KEY_ENTER:
-			Director::getInstance()->replaceScene(LW::create());
+		case EventKeyboard::KeyCode::KEY_SPACE:
+			Director::getInstance()->replaceScene(MazeScene2::create());
 			break;
 		default: break;
 		};

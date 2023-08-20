@@ -30,7 +30,7 @@ public:
 	const Size* tileSize;
 
 	std::pair<int, int> playerPosition;
-	std::pair<int, int> endPosition;
+	std::vector < std::pair<int, int>> endPosition;
 
 	TMXLayer* path;
 	DrawNode* drawNode;
@@ -50,12 +50,17 @@ private:
 	TMXLayer* collision;
 	TMXLayer* playerStartLayer;
 
+	std::vector<std::vector<bool>> cheeseVisited;
+
 	Sprite* active;
 	Sprite* ratDown;
 	Sprite* ratLeft;
 	Sprite* ratUp;
 	Sprite* ratRight;
-	Sprite* cheese;
+	std::vector < Sprite*> cheese;
+
+	TMXTiledMap* map;
+	void CheesePath();
 
 	bool isPlayerMoving;
 	int playerLives;

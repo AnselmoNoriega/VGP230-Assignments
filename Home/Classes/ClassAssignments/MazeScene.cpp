@@ -8,7 +8,7 @@ cocos2d::Scene* MazeScene::createScene()
 
 bool MazeScene::init()
 {
-	auto map = TMXTiledMap::create("tmx/desert.tmx");
+	map = TMXTiledMap::create("tmx/desert.tmx");
 	path = map->getLayer("Path");
 	collision = map->getLayer("Collision");
 	playerStartLayer = map->getLayer("Player");
@@ -31,8 +31,6 @@ bool MazeScene::init()
 
 	enemies.push_back(MazeEnemy(Sprite::create("mouse-0.png"), cocos2d::Color3B::BLUE, mapSize));
 
-	cheese = Sprite::create("Cheese.png");
-
 	drawNode = DrawNode::create(10);
 
 	map->addChild(ratUp, 5);
@@ -40,7 +38,8 @@ bool MazeScene::init()
 	map->addChild(ratDown, 5);
 	map->addChild(ratLeft, 5);
 	map->addChild(drawNode, 4);
-	map->addChild(cheese, 4);
+
+	CheesePath();
 
 	for (int i = 0; i < enemies.size(); ++i)
 	{
@@ -77,7 +76,6 @@ bool MazeScene::init()
 	this->scheduleUpdate();
 
 	initialize(active, playerStartLayer, playerPosition, draw);
-	initialize(cheese, playerEndLayer, endPosition, draw);
 	setPosition(enemies[0].GetSprite(), { 10, 3 }, enemies[0].enemyPos, draw);
 
 	playerStartLayer->setVisible(false);
@@ -211,9 +209,13 @@ void MazeScene::update(float dt)
 			isPlayerMoving = true;
 		}
 
-		if (playerPosition == endPosition)
+		for (int i = 0; i < endPosition.size(); ++i)
 		{
-			gameState = FoundCheese;
+			if (playerPosition == endPosition[i])
+			{
+				cheese[i]->setVisible(false);
+				//gameState = FoundCheese;
+			}
 		}
 	}
 
@@ -253,6 +255,31 @@ void MazeScene::ResetInput()
 	left = false;
 	up = false;
 	right = false;
+}
+
+void MazeScene::CheesePath()
+{
+	std::pair<int, int> temp = { -1, -1 };
+	auto& [x1, y1] = temp;
+
+	for (int i = 0; i < mapSize->width; ++i)
+	{
+		++x1;
+		y1 = -1;
+
+		for (int j = 0; j < mapSize->height; ++j)
+		{
+			++y1;
+
+			if (canSetPosition({ x1, y1 }))
+			{
+				endPosition.push_back({ x1, y1 });
+				cheese.push_back(Sprite::create("Cheese.png"));
+				map->addChild(cheese.back(), 4);
+				setPosition(cheese.back(), { x1, y1 }, temp, false);
+			}
+		}
+	}
 }
 
 void MazeScene::PlayerHit()

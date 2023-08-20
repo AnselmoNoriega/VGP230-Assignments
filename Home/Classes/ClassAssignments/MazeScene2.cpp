@@ -39,42 +39,24 @@ void MazeScene2::update(float dt)
 
 	Vec2 size = { tileSize->width, tileSize->height };
 
-	if (true)
+	reset(dfsVisited, dfsPath, false);
+	if (int l = dfs(playerPosition, endPosition.front(), 0); l != -1)
 	{
-		reset(dfsVisited, dfsPath, false);
-		if (int l = dfs(playerPosition, endPosition, 0); l != -1)
-		{
-			if (draw)
-			{
-				drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
-				drawPath(dfsPath, { 0.0f, 0.0f }, Color4F::RED);
-			}
-		}
-		else
-		{
-			drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
-		}
 		if (draw)
 		{
-			drawPath(enemies[0].bfsPath, { 0.0f, 0.0f }, Color4F::BLUE);
+			drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
+			drawPath(dfsPath, { 0.0f, 0.0f }, Color4F::RED);
 		}
 	}
-	else
+	else if (draw)
 	{
-		auto bfsOffset = std::pair{ 0.0f, 0.0f };
-
-		reset(bfsVisited, bfsPath, { -1, -1 });
-		if (bfs(playerPosition, endPosition))
-		{
-			bfsBacktrack();
-			drawVisited(bfsVisited, Color4F::GREEN, bfsOffset, size, { -1, -1 });
-			drawPath(bfsPath, { 5.0f, -5.0f }, Color4F::BLUE);
-		}
-		else
-		{
-			drawVisited(bfsVisited, Color4F::GREEN, bfsOffset, size, { -1, -1 });
-		}
+		drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
 	}
+	if (draw)
+	{
+		drawPath(enemies[0].bfsPath, { 0.0f, 0.0f }, Color4F::BLUE);
+	}
+
 }
 
 int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& target, int depth)
