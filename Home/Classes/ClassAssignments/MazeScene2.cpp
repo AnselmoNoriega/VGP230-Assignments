@@ -44,15 +44,20 @@ void MazeScene2::update(float dt)
 		reset(dfsVisited, dfsPath, false);
 		if (int l = dfs(playerPosition, endPosition, 0); l != -1)
 		{
-			drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
-			drawPath(dfsPath, { 0.0f, 0.0f }, Color4F::RED);
+			if (draw)
+			{
+				drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
+				drawPath(dfsPath, { 0.0f, 0.0f }, Color4F::RED);
+			}
 		}
 		else
 		{
 			drawVisited(dfsVisited, Color4F::ORANGE, { 0.0f,0.0f }, size, false);
 		}
-
-		drawPath(enemies[0].bfsPath, { 0.0f, 0.0f }, Color4F::BLUE);
+		if (draw)
+		{
+			drawPath(enemies[0].bfsPath, { 0.0f, 0.0f }, Color4F::BLUE);
+		}
 	}
 	else
 	{
@@ -87,7 +92,7 @@ int MazeScene2::dfs(std::pair<int, int> current, std::pair<int, int>const& targe
 
 	if (current == target)
 	{
-		dfsPath.push_back({x1, y1});
+		dfsPath.push_back({ x1, y1 });
 		return depth;
 	}
 

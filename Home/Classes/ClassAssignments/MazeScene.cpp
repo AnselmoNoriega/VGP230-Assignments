@@ -51,31 +51,34 @@ bool MazeScene::init()
 
 	auto keyboardListener = EventListenerKeyboard::create();
 	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event)
-	{
-		switch (keyCode)
 		{
-		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-			left = true;
-			break;
-		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-			right = true;
-			break;
-		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-			down = true;
-			break;
-		case EventKeyboard::KeyCode::KEY_UP_ARROW:
-			up = true;
-			break;
+			switch (keyCode)
+			{
+			case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+				left = true;
+				break;
+			case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+				right = true;
+				break;
+			case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+				down = true;
+				break;
+			case EventKeyboard::KeyCode::KEY_UP_ARROW:
+				up = true;
+				break;
+			case EventKeyboard::KeyCode::KEY_C:
+				draw = !draw;
+				break;
+			};
 		};
-	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
 	this->scheduleUpdate();
 
-	initialize(active, playerStartLayer, playerPosition);
-	initialize(cheese, playerEndLayer, endPosition, false);
-	setPosition(enemies[0].GetSprite(), {10, 3}, enemies[0].enemyPos);
+	initialize(active, playerStartLayer, playerPosition, draw);
+	initialize(cheese, playerEndLayer, endPosition, draw);
+	setPosition(enemies[0].GetSprite(), { 10, 3 }, enemies[0].enemyPos, draw);
 
 	playerStartLayer->setVisible(false);
 	playerEndLayer->setVisible(false);
@@ -115,8 +118,6 @@ void MazeScene::setPosition(Sprite* spr, std::pair<int, int> newPosition, std::p
 
 	spr->setPosition(x, y);
 
-	drawNode->clear();
-
 	if (draw)
 	{
 		auto dx = tileSize->width / 2;
@@ -133,7 +134,10 @@ bool MazeScene::canSetPosition(std::pair<int, int> p)
 
 void MazeScene::update(float dt)
 {
-	/// TODO: Check if game state is running
+	if (!isPlayerMoving || !draw)
+	{
+	}
+
 	isPlayerMoving = false;
 
 	if (enemies[0].enemyPos == playerPosition)
@@ -149,11 +153,12 @@ void MazeScene::update(float dt)
 			auto p = std::make_pair(playerPosition.first, playerPosition.second - 1);
 
 			changeActiveSprite(ratDown);
+			drawNode->clear();
 
 			if (canSetPosition(p))
 			{
 				/// TODO: call Change Active Sprite
-				setPosition(active, p, playerPosition);
+				setPosition(active, p, playerPosition, draw);
 			}
 
 			isPlayerMoving = true;
@@ -164,11 +169,12 @@ void MazeScene::update(float dt)
 			auto p = std::make_pair(playerPosition.first - 1, playerPosition.second);
 
 			changeActiveSprite(ratLeft);
+			drawNode->clear();
 
 			if (canSetPosition(p))
 			{
 				/// TODO: call Change Active Sprite
-				setPosition(active, p, playerPosition);
+				setPosition(active, p, playerPosition, draw);
 			}
 
 			isPlayerMoving = true;
@@ -179,10 +185,11 @@ void MazeScene::update(float dt)
 			auto p = std::make_pair(playerPosition.first, playerPosition.second + 1);
 
 			changeActiveSprite(ratUp);
+			drawNode->clear();
 
 			if (canSetPosition(p))
 			{
-				setPosition(active, p, playerPosition);
+				setPosition(active, p, playerPosition, draw);
 			}
 
 			isPlayerMoving = true;
@@ -193,11 +200,12 @@ void MazeScene::update(float dt)
 			auto p = std::make_pair(playerPosition.first + 1, playerPosition.second);
 
 			changeActiveSprite(ratRight);
+			drawNode->clear();
 
 			if (canSetPosition(p))
 			{
 				/// TODO: call Change Active Sprite
-				setPosition(active, p, playerPosition);
+				setPosition(active, p, playerPosition, draw);
 			}
 
 			isPlayerMoving = true;
@@ -223,7 +231,7 @@ void MazeScene::update(float dt)
 
 	if (isPlayerMoving && enemies[0].Move(path, playerPosition))
 	{
-		setPosition(enemies[0].GetSprite(), enemies[0].newPos, enemies[0].enemyPos);
+		setPosition(enemies[0].GetSprite(), enemies[0].newPos, enemies[0].enemyPos, draw);
 	}
 }
 

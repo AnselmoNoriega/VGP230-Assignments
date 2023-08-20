@@ -36,6 +36,8 @@ public:
 	DrawNode* drawNode;
 	std::vector<MazeEnemy> enemies;
 
+	bool draw = false;
+
 private:
 	enum GameState
 	{
