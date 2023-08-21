@@ -19,7 +19,7 @@ bool VictoryScene::init()
 	_screenPos = Director::getInstance()->getVisibleSize();
 	auto centerOfScreen = Vec2(_screenPos.width / 2, _screenPos.height / 2);
 
-	background = Sprite::create("victory.png");
+	background = Sprite::create("victory.jpg");
 	this->addChild(background, 0);
 	background->setPosition(centerOfScreen);
 

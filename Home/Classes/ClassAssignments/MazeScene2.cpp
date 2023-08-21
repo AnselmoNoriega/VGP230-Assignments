@@ -40,6 +40,9 @@ void MazeScene2::update(float dt)
 	Vec2 size = { tileSize->width, tileSize->height };
 
 	reset(dfsVisited, dfsPath, false);
+
+	if (endPosition.size() <= 0) { return; }
+
 	if (int l = dfs(playerPosition, endPosition.front(), 0); l != -1)
 	{
 		if (draw)

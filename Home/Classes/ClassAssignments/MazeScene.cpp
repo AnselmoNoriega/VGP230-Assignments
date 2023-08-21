@@ -1,4 +1,5 @@
 #include "MazeScene.h"
+#include "MidTerm/VictoryScene.h"
 #include "LW.h"
 
 cocos2d::Scene* MazeScene::createScene()
@@ -212,6 +213,7 @@ void MazeScene::update(float dt)
 				if (cheese[i]->getColor() == Color3B::BLUE)
 				{
 					playerState = Invincible;
+					stateDuration = 11;
 					for (auto& enemy : enemies)
 					{
 						enemy.GetSprite()->setColor(Color3B::WHITE);
@@ -221,9 +223,13 @@ void MazeScene::update(float dt)
 				cheese[i]->setVisible(false);
 				cheese.erase(cheese.begin() + i);
 				endPosition.erase(endPosition.begin() + i);
-				//gameState = FoundCheese;
 			}
 		}
+	}
+
+	if (endPosition.size() == 0)
+	{
+		gameState = FoundCheese;
 	}
 
 	if (gameState == FoundCheese)
@@ -233,6 +239,7 @@ void MazeScene::update(float dt)
 		if (active->getRotation() >= 360)
 		{
 			gameState = Victory;
+			Director::getInstance()->replaceScene(VictoryScene::createScene());
 		}
 	}
 
@@ -247,7 +254,7 @@ void MazeScene::update(float dt)
 
 		if (enemy.enemyPos == playerPosition && playerState == Normal)
 		{
-			PlayerHit();
+			//PlayerHit();
 		}
 		else if (enemy.enemyPos == playerPosition && playerState == Invincible)
 		{
@@ -259,7 +266,6 @@ void MazeScene::update(float dt)
 	if (stateDuration <= 0)
 	{
 		playerState = Normal;
-		stateDuration = 11;
 		for (auto& enemy : enemies)
 		{
 			enemy.GetSprite()->setColor(Color3B::RED);
@@ -307,7 +313,7 @@ void MazeScene::CheesePath()
 
 			if (canSetPosition({ x1, y1 }))
 			{
-				auto rand = cocos2d::random(0, 20);
+				auto rand = cocos2d::random(0, 15);
 				endPosition.push_back({ x1, y1 });
 				cheese.push_back(Sprite::create("Cheese.png"));
 				map->addChild(cheese.back(), 4);
