@@ -11,8 +11,10 @@ public:
 
 	std::pair<int, int> enemyPos;
 	std::pair<int, int> newPos;
+	std::pair<int, int> spawnPoint;
 
 	std::vector<std::pair<int, int>> bfsPath;
+
 private:
 	struct TileNode
 	{

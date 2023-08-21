@@ -47,6 +47,13 @@ private:
 		Victory
 	} gameState = Start;
 
+	enum PlayerState
+	{
+		Normal,
+		Invincible
+	} playerState = Normal;
+	int stateDuration = 11;
+
 	TMXLayer* collision;
 	TMXLayer* playerStartLayer;
 

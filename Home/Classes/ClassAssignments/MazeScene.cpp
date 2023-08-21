@@ -29,7 +29,8 @@ bool MazeScene::init()
 	ratLeft = Sprite::create("mouse-9.png");   //9, 10, 11
 	ratLeft->setVisible(false);
 
-	enemies.push_back(MazeEnemy(Sprite::create("mouse-0.png"), cocos2d::Color3B::BLUE, mapSize));
+	enemies.push_back(MazeEnemy(Sprite::create("oqzome.png"), cocos2d::Color3B::RED, mapSize));
+	enemies.push_back(MazeEnemy(Sprite::create("oqzome.png"), cocos2d::Color3B::RED, mapSize));
 
 	drawNode = DrawNode::create(10);
 
@@ -40,11 +41,6 @@ bool MazeScene::init()
 	map->addChild(drawNode, 4);
 
 	CheesePath();
-
-	for (int i = 0; i < enemies.size(); ++i)
-	{
-		map->addChild(enemies[i].GetSprite(), 5);
-	}
 
 	active = ratRight;
 
@@ -76,7 +72,16 @@ bool MazeScene::init()
 	this->scheduleUpdate();
 
 	initialize(active, playerStartLayer, playerPosition, draw);
-	setPosition(enemies[0].GetSprite(), { 10, 3 }, enemies[0].enemyPos, draw);
+
+	enemies[0].spawnPoint = { 10, 3 };
+	enemies[1].spawnPoint = { 10, 5 };
+
+	for (auto& enemy : enemies)
+	{
+		enemy.GetSprite()->setScale(0.15f);
+		map->addChild(enemy.GetSprite(), 5);
+		setPosition(enemy.GetSprite(), enemy.spawnPoint, enemy.enemyPos, draw);
+	}
 
 	playerStartLayer->setVisible(false);
 	playerEndLayer->setVisible(false);
@@ -132,16 +137,7 @@ bool MazeScene::canSetPosition(std::pair<int, int> p)
 
 void MazeScene::update(float dt)
 {
-	if (!isPlayerMoving || !draw)
-	{
-	}
-
 	isPlayerMoving = false;
-
-	if (enemies[0].enemyPos == playerPosition)
-	{
-		PlayerHit();
-	}
 
 	if (gameState == Running)
 	{
@@ -213,7 +209,18 @@ void MazeScene::update(float dt)
 		{
 			if (playerPosition == endPosition[i])
 			{
+				if (cheese[i]->getColor() == Color3B::BLUE)
+				{
+					playerState = Invincible;
+					for (auto& enemy : enemies)
+					{
+						enemy.GetSprite()->setColor(Color3B::WHITE);
+					}
+				}
+
 				cheese[i]->setVisible(false);
+				cheese.erase(cheese.begin() + i);
+				endPosition.erase(endPosition.begin() + i);
 				//gameState = FoundCheese;
 			}
 		}
@@ -231,9 +238,36 @@ void MazeScene::update(float dt)
 
 	ResetInput();
 
-	if (isPlayerMoving && enemies[0].Move(path, playerPosition))
+	for (auto& enemy : enemies)
 	{
-		setPosition(enemies[0].GetSprite(), enemies[0].newPos, enemies[0].enemyPos, draw);
+		if (isPlayerMoving && enemy.Move(path, playerPosition))
+		{
+			setPosition(enemy.GetSprite(), enemy.newPos, enemy.enemyPos, draw);
+		}
+
+		if (enemy.enemyPos == playerPosition && playerState == Normal)
+		{
+			PlayerHit();
+		}
+		else if (enemy.enemyPos == playerPosition && playerState == Invincible)
+		{
+			setPosition(enemy.GetSprite(), enemy.spawnPoint, enemy.enemyPos, draw);
+		}
+
+	}
+
+	if (stateDuration <= 0)
+	{
+		playerState = Normal;
+		stateDuration = 11;
+		for (auto& enemy : enemies)
+		{
+			enemy.GetSprite()->setColor(Color3B::RED);
+		}
+	}
+	else if (isPlayerMoving && playerState == Invincible)
+	{
+		--stateDuration;
 	}
 }
 
@@ -273,10 +307,16 @@ void MazeScene::CheesePath()
 
 			if (canSetPosition({ x1, y1 }))
 			{
+				auto rand = cocos2d::random(0, 20);
 				endPosition.push_back({ x1, y1 });
 				cheese.push_back(Sprite::create("Cheese.png"));
 				map->addChild(cheese.back(), 4);
 				setPosition(cheese.back(), { x1, y1 }, temp, false);
+
+				if (rand == 5)
+				{
+					cheese.back()->setColor(Color3B::BLUE);
+				}
 			}
 		}
 	}
