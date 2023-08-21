@@ -254,7 +254,7 @@ void MazeScene::update(float dt)
 
 		if (enemy.enemyPos == playerPosition && playerState == Normal)
 		{
-			//PlayerHit();
+			PlayerHit();
 		}
 		else if (enemy.enemyPos == playerPosition && playerState == Invincible)
 		{

@@ -28,10 +28,12 @@ private:
 	bool canSetPosition(std::pair<int, int> playerPosition, cocos2d::TMXLayer* path);
 
 	bool BFSPath(std::pair<int, int> current, std::pair<int, int>const& target, cocos2d::TMXLayer* path);
+	void Clear();
 
 	cocos2d::Sprite* mSprite;
 	std::vector<std::vector<bool>> bfsVisited;
 	const cocos2d::Size* mapSize;
 	std::deque<std::shared_ptr<TileNode>> nodes;
+	std::deque<std::shared_ptr<TileNode>> closedNodes;
 
 };

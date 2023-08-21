@@ -41,6 +41,7 @@ bool MazeEnemy::Move(cocos2d::TMXLayer* path, std::pair<int, int> const& target)
 		}
 	}
 
+	Clear();
 
 	for (int i = 0; i < mapSize->width; ++i)
 	{
@@ -65,7 +66,9 @@ bool MazeEnemy::canSetPosition(std::pair<int, int> playerPosition, cocos2d::TMXL
 
 bool MazeEnemy::BFSPath(std::pair<int, int> current, std::pair<int, int> const& target, cocos2d::TMXLayer* path)
 {
+	Clear();
 	nodes.clear();
+
 	std::pair<int, int> p = FlipY(current);
 	std::shared_ptr<TileNode> currentNode(std::make_unique<TileNode>(current, nullptr));
 
@@ -103,10 +106,25 @@ bool MazeEnemy::BFSPath(std::pair<int, int> current, std::pair<int, int> const& 
 				bfsVisited[p.first][p.second] = true;
 			}
 		}
+
+		closedNodes.push_back(currentNode);
 	}
 
 
 	return false;
+}
+
+void MazeEnemy::Clear()
+{
+	for (auto& node : nodes)
+	{
+		if(node) node->parent = nullptr;
+	}
+	for (auto& node : closedNodes)
+	{
+		if (node) node->parent = nullptr;
+	}
+	closedNodes.clear();
 }
 
 template<typename T>
