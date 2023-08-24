@@ -14,6 +14,14 @@ public:
 
   virtual void update(float dt);
 
+protected:
+
+  float walkSpeed = 200;
+  float jumpSpeed = 400;
+  int scale = 2;
+  cocos2d::Vec2 startPosition = { origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 };
+  Sprite* mario;
+
   CREATE_FUNC(HelloMario)
 private:
   static Vector<SpriteFrame*> getAnimation(const char* format, int count)
@@ -42,11 +50,12 @@ private:
   void ChangeAnim(AnimationState anim, float speed);
 
   Vector<SpriteFrame*> animFrames[4];
-  Sprite* mario;
   PhysicsBody* marioPhysicsBody;
   std::vector<PhysicsBody*> contacts;
   KeyboardControllerComponent* controller;
 
   int movingSpeed = 0;
   bool contact = false;
+  Vec2 origin;
+  Size visibleSize;
 };

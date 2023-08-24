@@ -25,8 +25,8 @@ bool HelloMario::init()
 		return false;
 	}
 
-	auto visibleSize = _director->getVisibleSize();
-	auto origin = _director->getVisibleOrigin();
+	visibleSize = _director->getVisibleSize();
+	origin = _director->getVisibleOrigin();
 
 	/// TODO Design your own level(s)
 	auto level = TMXTiledMap::create("tmx/MarioSampleLevel.tmx");
@@ -41,8 +41,8 @@ bool HelloMario::init()
 
 	mario = Sprite::createWithSpriteFrame(animFrames[0].front());
 	addChild(mario);
-	mario->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
-	mario->setScale(2);
+	mario->setPosition(startPosition);
+	mario->setScale(scale);
 
 	mario->runAction(RepeatForever::create(Animate::create(Animation::createWithSpriteFrames(animFrames[0], 1.0f))));
 
@@ -158,13 +158,13 @@ void HelloMario::update(float dt)
 		{
 			ChangeAnim(AnimationState::Walking, 0.1f);
 			if (!mario->isFlippedX())mario->setFlippedX(true);
-			movingSpeed -= 200;
+			movingSpeed -= walkSpeed;
 		}
 		if (controller->IsRightPressed())
 		{
 			ChangeAnim(AnimationState::Walking, 0.1f);
 			if(mario->isFlippedX())mario->setFlippedX(false);
-			movingSpeed += 200;
+			movingSpeed += walkSpeed;
 		}
 
 		if (controller->IsDownPressed())
@@ -176,7 +176,7 @@ void HelloMario::update(float dt)
 		if (controller->IsUpPressed())
 		{
 			ChangeAnim(AnimationState::Jumping, 1.0f);
-			marioPhysicsBody->applyImpulse({ 0, 400 });
+			marioPhysicsBody->applyImpulse({ 0, jumpSpeed });
 		}
 
 		if (!controller->IsLeftPressed() && !controller->IsRightPressed() && !controller->IsDownPressed() && !controller->IsUpPressed())

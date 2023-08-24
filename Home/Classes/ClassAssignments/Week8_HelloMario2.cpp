@@ -92,11 +92,7 @@ void HelloMario2::initPauseMenu()
 		});
 
 	// TODO: add buttons into menu below
-	menu = cocos2d::Menu::create(newGameButton, nullptr);
-	menu->addChild(saveButton);
-	menu->addChild(loadButton);
-	menu->addChild(quitButton);
-	menu->addChild(menuButton);
+	menu = cocos2d::Menu::create(newGameButton, saveButton, loadButton, quitButton, menuButton, nullptr);
 	menu->alignItemsVerticallyWithPadding(20);
 
 	// Add the menu to the scene
@@ -136,7 +132,10 @@ void HelloMario2::hidePauseMenu()
 void HelloMario2::update(float dt)
 {
 	///TODO: If menu is open, don't call below
-	HelloMario::update(dt);
+	if (!menu->isVisible())
+	{
+		HelloMario::update(dt);
+	}
 }
 
 void HelloMario2::load()
@@ -158,21 +157,29 @@ void HelloMario2::load()
 
 		if (document.HasMember("WalkSpeed") && document["WalkSpeed"].IsFloat())
 		{
-			///TODO: Add variable walkSpeed to base class, then uncomment line below
-			//walkSpeed = document["WalkSpeed"].GetFloat();
+			walkSpeed = document["WalkSpeed"].GetFloat();
 		}
 
 		///TODO: load JumpSpeed into jumpSpeed -- Add variable to base class
+		if (document.HasMember("JumpSpeed") && document["JumpSpeed"].IsFloat())
+		{
+			jumpSpeed = document["JumpSpeed"].GetFloat();
+		}
 		///TODO: load Scale into scale -- Add variable to base class
+		if (document.HasMember("Scale") && document["Scale"].IsFloat())
+		{
+			scale = document["Scale"].GetInt();
+		}
 
 		if (document.HasMember("StartPosition") && document["StartPosition"].IsObject())
 		{
 			auto obj = document["StartPosition"].GetObjectW();
 			float x = obj.HasMember("X") && obj["X"].IsFloat() ? obj["X"].GetFloat() : 0.0f;
 			///TODO: load "Y" parameter
+			float y = obj.HasMember("Y") && obj["Y"].IsFloat() ? obj["Y"].GetFloat() : 0.0f;
 
 			///TODO: Add variable startPosition to base class, then uncomment line below
-			//startPosition = { x, y };
+			startPosition = { x, y };
 		}
 	}
 }
@@ -182,13 +189,16 @@ void HelloMario2::save()
 	rapidjson::Document document;
 	document.SetObject();
 
-	///TODO: add walkSpeed to base class then uncomment line below
-	//document.AddMember("WalkSpeed", walkSpeed, document.GetAllocator());
+	document.AddMember("WalkSpeed", walkSpeed, document.GetAllocator());
 	///TODO: save JumpSpeed
+	document.AddMember("JumpSpeed", jumpSpeed, document.GetAllocator());
 	///TODO: save Scale (mario size)
+	document.AddMember("Scale", scale, document.GetAllocator());
 
-	rapidjson::Value start(rapidjson::kObjectType);
 	/// TODO: add marios position into "X", and "Y" members inside of start 
+	rapidjson::Value start(rapidjson::kObjectType);
+	start.AddMember("X pos", mario->getPositionX(), document.GetAllocator());
+	start.AddMember("Y pos", mario->getPositionY(), document.GetAllocator());
 	document.AddMember("StartPosition", start, document.GetAllocator());
 
 	rapidjson::StringBuffer buffer;
@@ -200,4 +210,5 @@ void HelloMario2::save()
 	auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename("Mario.json");
 
 	/// TODO: Write json string to fullPath using FileUtils (writeStringToFile)
+	cocos2d::FileUtils::getInstance()->writeStringToFile(jsonStr, fullPath);
 }
