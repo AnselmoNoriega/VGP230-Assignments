@@ -121,7 +121,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 				currentScene = 0;
 			}
 
-			AudioEngine::stopAll();
+			//AudioEngine::stopAll();
 			Director::getInstance()->replaceScene(scenes[currentScene]());
 			break;
 		}
@@ -133,7 +133,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 				currentScene = scenes.size() - 1;
 			}
 
-			AudioEngine::stopAll();
+			//AudioEngine::stopAll();
 			Director::getInstance()->replaceScene(scenes[currentScene]());
 			break;
 		}
