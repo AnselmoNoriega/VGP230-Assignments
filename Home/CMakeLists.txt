@@ -67,8 +67,8 @@ endif(MSVC)
 #     )
 
 
-file(GLOB GAME_SOURCE "Classes/*.cpp")
-file(GLOB GAME_HEADER "Classes/*.h")
+file(GLOB GAME_SOURCE "Classes/Final/*.cpp")
+file(GLOB GAME_HEADER "Classes/Final/*.h")
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
