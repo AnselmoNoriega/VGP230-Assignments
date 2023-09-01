@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "Character.h"
 #define MAX 3
 
 class MainF : public cocos2d::Scene
@@ -21,4 +22,9 @@ private:
 	cocos2d::Vec2 screenSize;
 
 	void SetPhysicsMap(cocos2d::TMXTiledMap* map);
+
+	void InitWorld(Vec2 midlePos);
+
+	//---------------------------Entities--------------------------------
+	Character player;
 };

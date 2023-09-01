@@ -34,6 +34,8 @@ bool MainF::init()
 
 	Vec2 midlePos = Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2);
 
+	InitWorld(midlePos);
+
 	auto level = TMXTiledMap::create("tmx/TestMap.tmx");
 	this->addChild(level);
 	SetPhysicsMap(level);
@@ -61,13 +63,13 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 
 	physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
-	auto collicionFloor = map->getLayer("Tile Layer");
+	auto collisionFloor = map->getLayer("Tile Layer");
 
 	for (int row = 0; row < map->getMapSize().height; ++row)
 	{
 		for (int col = 0; col < map->getMapSize().width; ++col)
 		{
-			auto tile = collicionFloor->getTileAt(cocos2d::Vec2(col, row));
+			auto tile = collisionFloor->getTileAt(cocos2d::Vec2(col, row));
 
 			if (tile)
 			{
@@ -81,37 +83,11 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 		}
 	}
 
-	/*auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = [=](PhysicsContact& contact) -> bool
-	{
-		auto a = contact.getShapeA()->getBody();
-		auto b = contact.getShapeB()->getBody();
+}
 
-		auto other = marioPhysicsBody == a ? b : a;
-
-		if (marioPhysicsBody->getPosition().y > other->getPosition().y && abs(contact.getContactData()->normal.y) > 0.9f)
-		{
-			contacts.push_back(other);
-		}
-
-		return true;
-	};
-	contactListener->onContactSeparate = [=](PhysicsContact& contact)
-	{
-		auto a = contact.getShapeA()->getBody();
-		auto b = contact.getShapeB()->getBody();
-
-		auto separate = marioPhysicsBody == a ? b : a;
-
-		for (int i = 0; i < contacts.size(); ++i)
-		{
-			if (contacts[i] == separate)
-			{
-				contacts[i] = contacts[contacts.size() - 1];
-				contacts.pop_back();
-				break;
-			}
-		}
-	};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);*/
+void MainF::InitWorld(Vec2 midlePos)
+{
+	this->addChild(player.Get(), 0);
+	player.SetPosition(midlePos);
+	player.Init(getPhysicsWorld(), _eventDispatcher, this);
 }
