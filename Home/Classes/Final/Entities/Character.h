@@ -12,7 +12,8 @@ public:
 	void Update(float dt);
 
 	Sprite* Get();
-	void SetPosition(Vec2 pos);
+	void MovePosition(Vec2 pos);
+	void SetSpawn(Vec2 pos);
 
 private:
 	enum PlayerState
@@ -21,7 +22,7 @@ private:
 		RUNNING
 	} playerState = IDLE;
 
-	void CharacterPhysics(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
+	void CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene);
 	void CharacterController(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
 
 	void Animations();
@@ -33,6 +34,7 @@ private:
 	Sprite* sprite;
 	float speed;
 	float jumpSpeed;
+	Vec2 spawnPoint;
 
 	bool up;
 	bool right;

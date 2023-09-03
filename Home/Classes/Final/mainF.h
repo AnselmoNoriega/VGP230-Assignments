@@ -1,7 +1,8 @@
 #pragma once
+
 #include "cocos2d.h"
-#include "Character.h"
-#define MAX 3
+#include "Entities/Character.h"
+#include "Entities/Enemy.h"
 
 class MainF : public cocos2d::Scene
 {
@@ -27,4 +28,5 @@ private:
 
 	//---------------------------Entities--------------------------------
 	Character player;
+	std::vector<std::unique_ptr<Enemy>> enemies;
 };

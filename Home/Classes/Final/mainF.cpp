@@ -19,14 +19,12 @@ Scene* MainF::createScene()
 	return ret;
 }
 
-// Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
 	printf("Error while loading: %s\n", filename);
 	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// on "init" you need to initialize your instance
 bool MainF::init()
 {
 	origin = Director::getInstance()->getVisibleOrigin();
@@ -86,6 +84,13 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 void MainF::InitWorld(Vec2 midlePos)
 {
 	this->addChild(player.Get(), 0);
-	player.SetPosition(midlePos);
+	player.SetSpawn(midlePos);
 	player.Init(getPhysicsWorld(), _eventDispatcher, this);
+	enemies.push_back(std::make_unique<Enemy>(midlePos));
+
+	for (auto& enemy : enemies)
+	{
+		enemy->Init(_eventDispatcher, this);
+		this->addChild(enemy->Get(), 0);
+	}
 }
