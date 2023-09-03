@@ -40,14 +40,14 @@ bool MainF::init()
 	this->addChild(level);
 	SetPhysicsMap(level);
 
-	this->scheduleUpdate();
+	scheduleUpdate();
 
 	return true;
 }
 
 void MainF::update(float dt)
 {
-
+	player.Update(dt);
 }
 
 
@@ -60,8 +60,7 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 {
 	auto physicsWorld = getPhysicsWorld();
 	physicsWorld->setGravity(cocos2d::Vec2(0, -980));
-
-	physicsWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	physicsWorld->setDebugDrawMask(NULL);
 
 	auto collisionFloor = map->getLayer("Tile Layer");
 
@@ -82,7 +81,6 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 			}
 		}
 	}
-
 }
 
 void MainF::InitWorld(Vec2 midlePos)

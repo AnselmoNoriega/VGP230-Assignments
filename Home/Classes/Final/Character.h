@@ -15,10 +15,30 @@ public:
 	void SetPosition(Vec2 pos);
 
 private:
+	enum PlayerState
+	{
+		IDLE,
+		RUNNING
+	} playerState = IDLE;
+
 	void CharacterPhysics(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
+	void CharacterController(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
+	void Animation();
+
+	void ChangeAnim(PlayerState state, float speed);
+
+	static Vector<SpriteFrame*> GetAnimation(const char* format, int count);
+	void DebugDraw(PhysicsWorld* pWorld);
 
 	Sprite* sprite;
+	float speed;
+	float jumpSpeed;
+
+	bool up;
+	bool right;
+	bool left;
 
 	PhysicsBody* physicsBody;
-	std::vector<PhysicsBody*> contacts;
+	std::vector<PhysicsBody*> contactsD;
+	Vector<SpriteFrame*> anims[4];
 };
