@@ -23,11 +23,11 @@ private:
 
 	void CharacterPhysics(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
 	void CharacterController(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
-	void Animation();
 
+	void Animations();
 	void ChangeAnim(PlayerState state, float speed);
+	static Vector<SpriteFrame*> GetAnimation(int count);
 
-	static Vector<SpriteFrame*> GetAnimation(const char* format, int count);
 	void DebugDraw(PhysicsWorld* pWorld);
 
 	Sprite* sprite;
@@ -40,5 +40,5 @@ private:
 
 	PhysicsBody* physicsBody;
 	std::vector<PhysicsBody*> contactsD;
-	Vector<SpriteFrame*> anims[4];
+	Vector<Animation*> anims;
 };

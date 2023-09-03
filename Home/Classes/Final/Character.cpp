@@ -2,14 +2,14 @@
 
 Character::Character() : physicsBody(nullptr), speed(300.0f), jumpSpeed(400), up(false), left(false), right(false)
 {
-	Animation();
-	sprite = Sprite::createWithSpriteFrame(anims[0].front());;
+	Animations();
+	sprite = Sprite::create("Idle/tile001.png");
 	sprite->setScale(2);
 }
 
 void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene)
 {
-	sprite->runAction(RepeatForever::create(Animate::create(Animation::createWithSpriteFrames(anims[0], 0.2f))));
+	sprite->runAction(RepeatForever::create(Animate::create(anims.at(0))));
 	CharacterPhysics(pWorld, _eventDispatcher, scene);
 	CharacterController(pWorld, _eventDispatcher, scene);
 }
@@ -119,11 +119,11 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 		{
 		case EventKeyboard::KeyCode::KEY_D:
 			right = true;
-			ChangeAnim(RUNNING, 0.2f);
+			ChangeAnim(RUNNING, 0.1f);
 			break;
 		case EventKeyboard::KeyCode::KEY_A:
 			left = true;
-			ChangeAnim(RUNNING, 0.2f);
+			ChangeAnim(RUNNING, 0.1f);
 			break;
 		case EventKeyboard::KeyCode::KEY_W:
 			up = contactsD.size() > 0;
@@ -155,13 +155,17 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, scene);
 }
 
-void Character::Animation()
+//-----------------------------------------------------------------------------------------------------
+
+void Character::Animations()
 {
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Idle/KnightIdle.plist");
-	anims[0] = GetAnimation("tile0%02d.png", 10);
+	anims.pushBack(Animation::createWithSpriteFrames(GetAnimation(10), 0.2f));
+
 	SpriteFrameCache::getInstance()->removeSpriteFrames();
+
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Run/KnightRun.plist");
-	anims[1] = GetAnimation("tile0%02d.png", 10);
+	anims.pushBack(Animation::createWithSpriteFrames(GetAnimation(10), 0.1f));
 }
 
 void Character::ChangeAnim(PlayerState state, float speed)
@@ -170,11 +174,11 @@ void Character::ChangeAnim(PlayerState state, float speed)
 	{
 		playerState = state;
 		sprite->stopAllActions();
-		sprite->runAction(RepeatForever::create(Animate::create(Animation::createWithSpriteFrames(anims[(int)state], speed))));
+		sprite->runAction(RepeatForever::create(Animate::create(anims.at((int)state))));
 	}
 }
 
-Vector<SpriteFrame*> Character::GetAnimation(const char* format, int count)
+Vector<SpriteFrame*> Character::GetAnimation(int count)
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
 	Vector<SpriteFrame*> animFrames;
@@ -182,7 +186,7 @@ Vector<SpriteFrame*> Character::GetAnimation(const char* format, int count)
 
 	for (int i = 1; i <= count; i++)
 	{
-		snprintf(str, sizeof(str), format, i);
+		snprintf(str, sizeof(str), "tile0%02d.png", i);
 		animFrames.pushBack(spriteCache->getSpriteFrameByName(str));
 	}
 
