@@ -25,6 +25,8 @@ private:
 	void CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene);
 	void CharacterController(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
 
+	void CharacterMovement();
+
 	void Animations();
 	void ChangeAnim(PlayerState state, float speed);
 	static Vector<SpriteFrame*> GetAnimation(int count);
@@ -34,7 +36,9 @@ private:
 	Sprite* sprite;
 	float speed;
 	float jumpSpeed;
+
 	Vec2 spawnPoint;
+	bool isWithEnemy;
 
 	bool up;
 	bool right;
@@ -43,4 +47,6 @@ private:
 	PhysicsBody* physicsBody;
 	std::vector<PhysicsBody*> contactsD;
 	Vector<Animation*> anims;
+
+	ParticleSystemQuad* deathExplotion;
 };

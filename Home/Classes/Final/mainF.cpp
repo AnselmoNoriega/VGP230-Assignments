@@ -46,6 +46,11 @@ bool MainF::init()
 void MainF::update(float dt)
 {
 	player.Update(dt);
+	
+	for (auto& enemy : enemies)
+	{
+		enemy->Update(dt);
+	}
 }
 
 
@@ -83,7 +88,6 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 
 void MainF::InitWorld(Vec2 midlePos)
 {
-	this->addChild(player.Get(), 0);
 	player.SetSpawn(midlePos);
 	player.Init(getPhysicsWorld(), _eventDispatcher, this);
 	enemies.push_back(std::make_unique<Enemy>(midlePos));
@@ -91,6 +95,5 @@ void MainF::InitWorld(Vec2 midlePos)
 	for (auto& enemy : enemies)
 	{
 		enemy->Init(_eventDispatcher, this);
-		this->addChild(enemy->Get(), 0);
 	}
 }

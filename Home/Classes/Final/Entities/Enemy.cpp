@@ -10,6 +10,8 @@ Enemy::Enemy(Vec2 SpawnPoint): speed(100.0f)
 
 void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
 {
+	scene->addChild(sprite, 0);
+
 	sprite->runAction(RepeatForever::create(Animate::create(anim)));
 	CharacterPhysics(_eventDispatcher, scene);
 	physicsBody->setName("Enemy");
@@ -18,6 +20,12 @@ void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
 
 void Enemy::Update(float dt)
 {
+	/*if (abs(physicsBody->getVelocity().x) < 100 && physicsBody->getVelocity().x != 0)
+	{
+		speed *= -1;
+	}*/
+
+	physicsBody->setVelocity({speed, physicsBody->getVelocity().y});
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -43,6 +51,19 @@ void Enemy::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene)
 	physicsBody->setCollisionBitmask(2);
 	physicsBody->setContactTestBitmask(1);//
 	sprite->setPhysicsBody(physicsBody);
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = [=](PhysicsContact& contact) -> bool
+		{
+			if (abs(contact.getContactData()->normal.x) < 0.1f)
+			{
+				//speed *= -1;
+			}
+
+			return true;
+		};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, scene);
 }
 
 void Enemy::CharacterLogic(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene)

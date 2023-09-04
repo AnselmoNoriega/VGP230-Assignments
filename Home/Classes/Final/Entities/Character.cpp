@@ -5,33 +5,33 @@ Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(400), up(f
 	Animations();
 	sprite = Sprite::create("Idle/tile001.png");
 	sprite->setScale(2);
+	deathExplotion = ParticleSystemQuad::create("DeathParticle.plist");
+	deathExplotion->setScale(0.25f);
 }
 
 void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene)
 {
+	scene->addChild(sprite, 0);
+
 	sprite->runAction(RepeatForever::create(Animate::create(anims.at(0))));
 	CharacterPhysics(_eventDispatcher, scene);
 	CharacterController(pWorld, _eventDispatcher, scene);
 	sprite->setPosition(spawnPoint);
+
+	scene->addChild(deathExplotion, 1);
 }
 
 void Character::Update(float dt)
 {
-	physicsBody->setVelocity({ speed,physicsBody->getVelocity().y });
+	CharacterMovement();
 
-	if (right || left)
+	if(isWithEnemy)
 	{
-		sprite->setFlippedX(speed < 0);
-	}
-	else
-	{
-		ChangeAnim(IDLE, 0.2f);
-	}
+		deathExplotion->setPosition(sprite->getPosition());
+		deathExplotion->start();
 
-	if (up)
-	{
-		physicsBody->applyImpulse({ 0, jumpSpeed });
-		up = false;
+		sprite->setPosition(spawnPoint);
+		isWithEnemy = false;
 	}
 }
 
@@ -61,8 +61,8 @@ void Character::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene
 	physicsBody->setRotationEnable(false);
 	physicsBody->setDynamic(true);
 	physicsBody->setCategoryBitmask(1);
-	physicsBody->setCollisionBitmask(2);
-	physicsBody->setContactTestBitmask(2);
+	physicsBody->setCollisionBitmask(3);
+	physicsBody->setContactTestBitmask(3);
 	sprite->setPhysicsBody(physicsBody);
 
 	contactsD.reserve(5);
@@ -78,6 +78,10 @@ void Character::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene
 			if (physicsBody->getPosition().y > other->getPosition().y && abs(contact.getContactData()->normal.y) > 0.9f)
 			{
 				contactsD.push_back(other);
+			}
+			if (other->getName() == "Enemy")
+			{
+				isWithEnemy = true;
 			}
 
 			return true;
@@ -150,6 +154,26 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, scene);
+}
+
+void Character::CharacterMovement()
+{
+	physicsBody->setVelocity({ speed,physicsBody->getVelocity().y });
+
+	if (right || left)
+	{
+		sprite->setFlippedX(speed < 0);
+	}
+	else
+	{
+		ChangeAnim(IDLE, 0.2f);
+	}
+
+	if (up)
+	{
+		physicsBody->applyImpulse({ 0, jumpSpeed });
+		up = false;
+	}
 }
 
 //-----------------------------------------------------------------------------------------------------
