@@ -44,7 +44,8 @@ void Enemy::MovePosition(Vec2 pos)
 
 void Enemy::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene)
 {
-	physicsBody = cocos2d::PhysicsBody::createBox(sprite->getContentSize() / 1.1, PHYSICSSHAPE_MATERIAL_DEFAULT);
+	physicsBody = cocos2d::PhysicsBody::createBox(sprite->getContentSize() / 1.7, PHYSICSSHAPE_MATERIAL_DEFAULT);
+	physicsBody->setPositionOffset({0, -10});
 	physicsBody->setRotationEnable(false);
 	physicsBody->setDynamic(true);
 	physicsBody->setCategoryBitmask(1);

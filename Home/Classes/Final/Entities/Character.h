@@ -19,7 +19,8 @@ private:
 	enum PlayerState
 	{
 		IDLE,
-		RUNNING
+		RUNNING,
+		JUMPING
 	} playerState = IDLE;
 
 	void CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene);
@@ -32,10 +33,12 @@ private:
 	static Vector<SpriteFrame*> GetAnimation(int count);
 
 	void DebugDraw(PhysicsWorld* pWorld);
+	void SpawnTimer(float dt);
 
 	Sprite* sprite;
 	float speed;
-	float jumpSpeed;
+	float boost;
+	const float jumpSpeed;
 
 	Vec2 spawnPoint;
 	bool isWithEnemy;
@@ -44,8 +47,14 @@ private:
 	bool right;
 	bool left;
 
-	PhysicsBody* physicsBody;
+	float timer;
+	const float spawnTime;
+	bool isTimeRunning;
+
+	PhysicsWorld* physicsWorld;
+
 	std::vector<PhysicsBody*> contactsD;
+	PhysicsBody* physicsBody;
 	Vector<Animation*> anims;
 
 	ParticleSystemQuad* deathExplotion;

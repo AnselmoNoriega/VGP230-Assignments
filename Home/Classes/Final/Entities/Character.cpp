@@ -1,6 +1,6 @@
 #include "Character.h"
 
-Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(400), up(false), left(false), right(false)
+Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(400), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(spawnTime)
 {
 	Animations();
 	sprite = Sprite::create("Idle/tile001.png");
@@ -19,6 +19,8 @@ void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Sc
 	sprite->setPosition(spawnPoint);
 
 	scene->addChild(deathExplotion, 1);
+
+	physicsWorld = pWorld;
 }
 
 void Character::Update(float dt)
@@ -31,8 +33,13 @@ void Character::Update(float dt)
 		deathExplotion->start();
 
 		sprite->setPosition(spawnPoint);
+		sprite->setVisible(false);
+
+		physicsWorld->setSpeed(0.0f);
 		isWithEnemy = false;
 	}
+
+	SpawnTimer(dt);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -81,7 +88,8 @@ void Character::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene
 			}
 			if (other->getName() == "Enemy")
 			{
-				isWithEnemy = true;
+				isWithEnemy = true; 
+				isTimeRunning = true;
 			}
 
 			return true;
@@ -128,7 +136,7 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 				up = contactsD.size() > 0;
 				break;
 			case EventKeyboard::KeyCode::KEY_SHIFT:
-				speed = 500.0f;
+				boost = 1.5f;
 				break;
 			case EventKeyboard::KeyCode::KEY_C:
 				DebugDraw(pWorld);
@@ -147,8 +155,11 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 				left = false;
 				speed += 300.0f;
 				break;
+			case EventKeyboard::KeyCode::KEY_W:
+				up = false;
+				break;
 			case EventKeyboard::KeyCode::KEY_SHIFT:
-				speed = 300.0f;
+				boost = 1.0f;
 			};
 		};
 
@@ -158,13 +169,18 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 
 void Character::CharacterMovement()
 {
-	physicsBody->setVelocity({ speed,physicsBody->getVelocity().y });
+	physicsBody->setVelocity({ speed * boost,physicsBody->getVelocity().y });
+
+	if (contactsD.size() == 0)
+	{
+		ChangeAnim(JUMPING, 0.2f);
+	}
 
 	if (right || left)
 	{
 		sprite->setFlippedX(speed < 0);
 	}
-	else
+	if(contactsD.size() > 0)
 	{
 		ChangeAnim(IDLE, 0.2f);
 	}
@@ -187,6 +203,11 @@ void Character::Animations()
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Run/KnightRun.plist");
 	anims.pushBack(Animation::createWithSpriteFrames(GetAnimation(10), 0.1f));
+
+	SpriteFrameCache::getInstance()->removeSpriteFrames();
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Jump/KnightJump.plist");
+	anims.pushBack(Animation::createWithSpriteFrames(GetAnimation(3), 0.1f));
 
 	SpriteFrameCache::getInstance()->removeSpriteFrames();
 }
@@ -225,5 +246,21 @@ void Character::DebugDraw(PhysicsWorld* pWorld)
 	else
 	{
 		pWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	}
+}
+
+void Character::SpawnTimer(float dt)
+{
+	if (isTimeRunning)
+	{
+		timer -= dt;
+
+		if (timer <= 0.0f)
+		{
+			sprite->setVisible(true);
+			timer = spawnTime;
+			physicsWorld->setSpeed(1.0f);
+			isTimeRunning = false;
+		}
 	}
 }
