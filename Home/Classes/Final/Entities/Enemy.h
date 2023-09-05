@@ -24,6 +24,7 @@ private:
 	static Vector<SpriteFrame*> GetAnimation(int count);
 
 	Sprite* sprite;
+	bool isFlipped;
 	float speed;
 	Vec2 spawnPoint;
 

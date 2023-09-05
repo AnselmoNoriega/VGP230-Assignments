@@ -1,8 +1,8 @@
 #include "Enemy.h"
 
-Enemy::Enemy(Vec2 SpawnPoint): speed(100.0f)
+Enemy::Enemy(Vec2 SpawnPoint) : speed(100.0f), isFlipped(false)
 {
-	Animations(); 
+	Animations();
 	sprite = Sprite::create("Enemy/tile001.png");
 	sprite->setScale(2);
 	spawnPoint = SpawnPoint;
@@ -20,12 +20,7 @@ void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
 
 void Enemy::Update(float dt)
 {
-	/*if (abs(physicsBody->getVelocity().x) < 100 && physicsBody->getVelocity().x != 0)
-	{
-		speed *= -1;
-	}*/
-
-	physicsBody->setVelocity({speed, physicsBody->getVelocity().y});
+	physicsBody->setVelocity({ speed, physicsBody->getVelocity().y });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -45,7 +40,7 @@ void Enemy::MovePosition(Vec2 pos)
 void Enemy::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene)
 {
 	physicsBody = cocos2d::PhysicsBody::createBox(sprite->getContentSize() / 1.7, PHYSICSSHAPE_MATERIAL_DEFAULT);
-	physicsBody->setPositionOffset({0, -10});
+	physicsBody->setPositionOffset({ 0, -10 });
 	physicsBody->setRotationEnable(false);
 	physicsBody->setDynamic(true);
 	physicsBody->setCategoryBitmask(1);
@@ -55,14 +50,20 @@ void Enemy::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene)
 
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [=](PhysicsContact& contact) -> bool
-		{
-			if (abs(contact.getContactData()->normal.x) < 0.1f)
-			{
-				//speed *= -1;
-			}
+	{
+		auto a = contact.getShapeA()->getBody();
+		auto b = contact.getShapeB()->getBody();
 
-			return true;
-		};
+		auto other = physicsBody == a ? b : a;
+		auto t = other->getName();
+		if (other->getName() == "Wall")
+		{
+			speed *= -1;
+			sprite->setFlippedX(isFlipped = !isFlipped);
+		}
+
+		return true;
+	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, scene);
 }

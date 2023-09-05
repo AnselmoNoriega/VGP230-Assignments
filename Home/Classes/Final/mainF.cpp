@@ -35,7 +35,7 @@ bool MainF::init()
 	InitWorld(midlePos);
 
 	auto level = TMXTiledMap::create("tmx/PracticeMap.tmx");
-	addChild(level, 1);
+	addChild(level, -1);
 	SetPhysicsMap(level, "Floor");
 	SetPhysicsMap(level, "Wall");
 
@@ -81,8 +81,8 @@ void MainF::SetPhysicsMap(TMXTiledMap* map, std::string tileName)
 				physicsBody->setCategoryBitmask(2);
 				physicsBody->setCollisionBitmask(1); 
 				physicsBody->setContactTestBitmask(1);
+				physicsBody->setName(tileName);
 				tile->setPhysicsBody(physicsBody);
-				tile->setName(tileName);
 			}
 		}
 	}
