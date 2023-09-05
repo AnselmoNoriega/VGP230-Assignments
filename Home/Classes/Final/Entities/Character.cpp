@@ -173,14 +173,14 @@ void Character::CharacterMovement()
 
 	if (contactsD.size() == 0)
 	{
-		ChangeAnim(JUMPING, 0.2f);
+		//ChangeAnim(JUMPING, 0.2f);
 	}
 
 	if (right || left)
 	{
 		sprite->setFlippedX(speed < 0);
 	}
-	if(contactsD.size() > 0)
+	else if(contactsD.size() > 0)
 	{
 		ChangeAnim(IDLE, 0.2f);
 	}

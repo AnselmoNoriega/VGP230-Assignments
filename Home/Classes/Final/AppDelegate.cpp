@@ -106,7 +106,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	register_all_packages();
 
-	auto scene = MainF::createScene();
+	auto scene = MainMenu::createScene();
 	// run
 	director->runWithScene(scene);
 

@@ -35,7 +35,7 @@ bool MainF::init()
 	InitWorld(midlePos);
 
 	auto level = TMXTiledMap::create("tmx/TestMap.tmx");
-	this->addChild(level);
+	addChild(level);
 	SetPhysicsMap(level);
 
 	scheduleUpdate();
