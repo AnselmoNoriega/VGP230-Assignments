@@ -125,12 +125,10 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 			case EventKeyboard::KeyCode::KEY_D:
 				right = true;
 				speed += 300.0f;
-				//ChangeAnim(RUNNING, 0.1f);
 				break;
 			case EventKeyboard::KeyCode::KEY_A:
 				left = true;
 				speed -= 300.0f;
-				//ChangeAnim(RUNNING, 0.1f);
 				break;
 			case EventKeyboard::KeyCode::KEY_W:
 				up = contactsD.size() > 0;
@@ -173,12 +171,13 @@ void Character::CharacterMovement()
 
 	if (contactsD.size() == 0)
 	{
-		//ChangeAnim(JUMPING, 0.2f);
+		ChangeAnim(JUMPING, 0.2f);
 	}
 
-	if (right || left)
+	if ((right || left) && contactsD.size() > 0)
 	{
 		sprite->setFlippedX(speed < 0);
+		ChangeAnim(RUNNING, 0.1f);
 	}
 	else if(contactsD.size() > 0)
 	{

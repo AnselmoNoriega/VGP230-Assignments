@@ -11,11 +11,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{32,40}</string>
+                <string>{33,45}</string>
                 <key>spriteSourceSize</key>
-                <string>{32,40}</string>
+                <string>{25,43}</string>
                 <key>textureRect</key>
-                <string>{{0,0},{32,40}}</string>
+                <string>{{0,0},{33,45}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -26,11 +26,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{32,40}</string>
+                <string>{33,45}</string>
                 <key>spriteSourceSize</key>
-                <string>{32,40}</string>
+                <string>{25,43}</string>
                 <key>textureRect</key>
-                <string>{{0,40},{32,40}}</string>
+                <string>{{33,0},{33,45}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -41,11 +41,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{32,40}</string>
+                <string>{33,45}</string>
                 <key>spriteSourceSize</key>
-                <string>{32,40}</string>
+                <string>{25,43}</string>
                 <key>textureRect</key>
-                <string>{{0,80},{32,40}}</string>
+                <string>{{66,0},{33,45}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -61,9 +61,9 @@
             <key>realTextureFileName</key>
             <string>KnightJump.png</string>
             <key>size</key>
-            <string>{32,120}</string>
+            <string>{99,45}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:e85886d20307fa066abb0f4fd06e1258:24ec62c9eb2b4414fd80e49c3c47ca7b:9cb8f2ca2f4d5b522b53cc5c9a0f5a8e$</string>
+            <string>$TexturePacker:SmartUpdate:374c47c9dc5d8c8efc6f4115ce25231b:2cf04f0162ff2a7802bc67a8ec655eea:9cb8f2ca2f4d5b522b53cc5c9a0f5a8e$</string>
             <key>textureFileName</key>
             <string>KnightJump.png</string>
         </dict>
