@@ -34,9 +34,10 @@ bool MainF::init()
 
 	InitWorld(midlePos);
 
-	auto level = TMXTiledMap::create("tmx/TestMap.tmx");
-	addChild(level);
-	SetPhysicsMap(level);
+	auto level = TMXTiledMap::create("tmx/PracticeMap.tmx");
+	addChild(level, 1);
+	SetPhysicsMap(level, "Floor");
+	SetPhysicsMap(level, "Wall");
 
 	scheduleUpdate();
 
@@ -59,13 +60,13 @@ void MainF::menuCloseCallback(Ref* pSender)
 	Director::getInstance()->end();
 }
 
-void MainF::SetPhysicsMap(TMXTiledMap* map)
+void MainF::SetPhysicsMap(TMXTiledMap* map, std::string tileName)
 {
 	auto physicsWorld = getPhysicsWorld();
 	physicsWorld->setGravity(cocos2d::Vec2(0, -980));
 	physicsWorld->setDebugDrawMask(NULL);
 
-	auto collisionFloor = map->getLayer("Tile Layer");
+	auto collisionFloor = map->getLayer(tileName);
 
 	for (int row = 0; row < map->getMapSize().height; ++row)
 	{
@@ -81,6 +82,7 @@ void MainF::SetPhysicsMap(TMXTiledMap* map)
 				physicsBody->setCollisionBitmask(1); 
 				physicsBody->setContactTestBitmask(1);
 				tile->setPhysicsBody(physicsBody);
+				tile->setName(tileName);
 			}
 		}
 	}
