@@ -32,7 +32,7 @@ bool MainF::init()
 
 	Vec2 midlePos = Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2);
 
-	auto level = TMXTiledMap::create("tmx/FirstLevel.tmx");
+	auto level = TMXTiledMap::create("tmx/" + mapName);
 	addChild(level, -1);
 
 	InitWorld(level);

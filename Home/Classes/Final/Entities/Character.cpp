@@ -1,6 +1,6 @@
 #include "Character.h"
 
-Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(650), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(spawnTime), hasDoubleJump(false)
+Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(650), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(1.0f), hasDoubleJump(false)
 {
 	Animations();
 	sprite = Sprite::create("Idle/tile001.png");
@@ -19,6 +19,7 @@ void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Sc
 	sprite->setPosition(spawnPoint);
 
 	scene->addChild(deathExplotion, 1);
+	deathExplotion->setVisible(false);
 
 	physicsWorld = pWorld;
 }
@@ -37,6 +38,7 @@ void Character::Update(float dt)
 	{
 		isTimeRunning = true;
 		deathExplotion->setPosition(sprite->getPosition());
+		deathExplotion->setVisible(true);
 		deathExplotion->start();
 
 		sprite->setPosition(spawnPoint);

@@ -4,6 +4,8 @@
 #include "Entities/Character.h"
 #include "Entities/Enemy.h"
 
+extern std::string mapName;
+
 class MainF : public cocos2d::Scene
 {
 public:

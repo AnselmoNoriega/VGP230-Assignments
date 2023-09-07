@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+std::string mapName;
+
 Scene* MainMenu::createScene()
 {
 	return MainMenu::create();
@@ -16,6 +18,7 @@ bool MainMenu::init()
 
 	auto newGame = MenuItemLabel::create(cocos2d::Label::createWithTTF("New Game", "fonts/Marker Felt.ttf", 24), [this](cocos2d::Ref* sender)
 		{
+			mapName = "FirstLevel.tmx";
 			Director::getInstance()->replaceScene(MainF::createScene());
 		});
 
