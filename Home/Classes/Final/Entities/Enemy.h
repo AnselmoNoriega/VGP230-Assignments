@@ -7,7 +7,8 @@ enum EnemyType
 {
 	NONE,
 	FLYING,
-	GROUND
+	GROUND,
+	OBSTACLE
 };
 
 class Enemy

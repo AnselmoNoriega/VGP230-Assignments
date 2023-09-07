@@ -34,10 +34,12 @@ bool MainF::init()
 
 	InitWorld(midlePos);
 
-	auto level = TMXTiledMap::create("tmx/PracticeMap.tmx");
+	auto level = TMXTiledMap::create("tmx/FirstLevel.tmx");
 	addChild(level, -1);
-	SetPhysicsMap(level, "Floor");
-	SetPhysicsMap(level, "Wall");
+	level->getLayer("EnemySpawn")->setVisible(false);
+	level->getLayer("Exit")->setVisible(false);
+
+	SetPhysicsMap(level, "Collision");
 
 	scheduleUpdate();
 
@@ -52,6 +54,8 @@ void MainF::update(float dt)
 	{
 		enemy->Update(dt);
 	}
+
+	_defaultCamera->setPosition(player.Get()->getPosition());
 }
 
 

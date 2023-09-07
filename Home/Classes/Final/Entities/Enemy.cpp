@@ -17,6 +17,7 @@ void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
 	CharacterPhysics(_eventDispatcher, scene);
 	physicsBody->setName("Enemy");
 	sprite->setPosition(spawnPoint);
+	if (myType == GROUND) { speed = Vec2::ZERO; }
 }
 
 void Enemy::Update(float dt)
