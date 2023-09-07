@@ -23,10 +23,13 @@ private:
 	cocos2d::Vec2 screenSize;
 
 	void SetPhysicsMap(cocos2d::TMXTiledMap* map, std::string tileName);
+	void SetEntityPos(cocos2d::TMXTiledMap* map, std::string tileName);
+	cocos2d::Vec2 LookForTile(cocos2d::TMXTiledMap* map, std::string tileName);
 
-	void InitWorld(Vec2 midlePos);
+	void InitWorld(cocos2d::TMXTiledMap* map);
 
 	//---------------------------Entities--------------------------------
 	Character player;
 	std::vector<std::unique_ptr<Enemy>> enemies;
+	std::vector<Vec2> enemyPositions;
 };

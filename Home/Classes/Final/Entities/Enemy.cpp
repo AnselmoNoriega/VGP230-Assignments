@@ -2,11 +2,11 @@
 
 Enemy::Enemy(EnemyType type, Vec2 SpawnPoint, float moveTime) : speed({ 100.0f, 0.0f }), isFlipped(false), movementTime(moveTime), timer(movementTime)
 {
+	myType = type;
 	Animations();
-	sprite = Sprite::create("Enemy/tile001.png");
+	sprite = Sprite::create(enemyName[myType] + "/tile001.png");
 	sprite->setScale(2);
 	spawnPoint = SpawnPoint;
-	myType = type;
 }
 
 void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
@@ -17,7 +17,7 @@ void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
 	CharacterPhysics(_eventDispatcher, scene);
 	physicsBody->setName("Enemy");
 	sprite->setPosition(spawnPoint);
-	if (myType == GROUND) { speed = Vec2::ZERO; }
+	if (myType == OBSTACLE) { speed = Vec2::ZERO; }
 }
 
 void Enemy::Update(float dt)
@@ -44,8 +44,7 @@ void Enemy::MovePosition(Vec2 pos)
 
 void Enemy::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene)
 {
-	physicsBody = cocos2d::PhysicsBody::createBox(sprite->getContentSize() / 1.7, PHYSICSSHAPE_MATERIAL_DEFAULT);
-	physicsBody->setPositionOffset({ 0, -10 });
+	physicsBody = cocos2d::PhysicsBody::createBox(sprite->getContentSize(), PHYSICSSHAPE_MATERIAL_DEFAULT);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setDynamic(true);
 	physicsBody->setCategoryBitmask(1);
@@ -74,8 +73,8 @@ void Enemy::MoveTimer(float dt)
 
 void Enemy::Animations()
 {
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Enemy/EnemyMove.plist");
-	anim = (Animation::createWithSpriteFrames(GetAnimation(18), 0.2f));
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(enemyName[myType] + "/EnemyMove.plist");
+	anim = (Animation::createWithSpriteFrames(GetAnimation(5 + (myType - 1) * (myType - 1) * 3), 0.2f));
 
 	SpriteFrameCache::getInstance()->removeSpriteFrames();
 }

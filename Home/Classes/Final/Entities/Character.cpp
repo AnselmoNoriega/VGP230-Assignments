@@ -1,6 +1,6 @@
 #include "Character.h"
 
-Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(400), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(spawnTime)
+Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(650), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(spawnTime), hasDoubleJump(false)
 {
 	Animations();
 	sprite = Sprite::create("Idle/tile001.png");
@@ -28,12 +28,12 @@ void Character::Update(float dt)
 	CharacterMovement();
 	auto t = sprite->getPositionY();
 
-	if (sprite->getPositionY() < spawnPoint.y -1000)
+	if (sprite->getPositionY() < spawnPoint.y - 1000)
 	{
 		isWithEnemy = true;
 	}
 
-	if(isWithEnemy)
+	if (isWithEnemy)
 	{
 		isTimeRunning = true;
 		deathExplotion->setPosition(sprite->getPosition());
@@ -78,6 +78,7 @@ void Character::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene
 	physicsBody->setCategoryBitmask(1);
 	physicsBody->setCollisionBitmask(3);
 	physicsBody->setContactTestBitmask(3);
+	physicsBody->setName("Player");
 	sprite->setPhysicsBody(physicsBody);
 
 	contactsD.reserve(5);
@@ -89,14 +90,15 @@ void Character::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene
 			auto b = contact.getShapeB()->getBody();
 
 			auto other = physicsBody == a ? b : a;
+			auto mySelf = physicsBody != a ? b : a;
 
 			if (physicsBody->getPosition().y > other->getPosition().y && abs(contact.getContactData()->normal.y) > 0.9f)
 			{
 				contactsD.push_back(other);
 			}
-			if (other->getName() == "Enemy")
+			if (other->getName() == "Enemy" && mySelf->getName() == "Player")
 			{
-				isWithEnemy = true; 
+				isWithEnemy = true;
 			}
 
 			return true;
@@ -138,7 +140,7 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 				speed -= 300.0f;
 				break;
 			case EventKeyboard::KeyCode::KEY_W:
-				up = contactsD.size() > 0;
+				up = (contactsD.size() > 0 || hasDoubleJump);
 				break;
 			case EventKeyboard::KeyCode::KEY_SHIFT:
 				boost = 1.5f;
@@ -186,15 +188,26 @@ void Character::CharacterMovement()
 		sprite->setFlippedX(speed < 0);
 		ChangeAnim(RUNNING, 0.1f);
 	}
-	else if(contactsD.size() > 0)
+	else if (contactsD.size() > 0)
 	{
 		ChangeAnim(IDLE, 0.2f);
 	}
 
 	if (up)
 	{
+		physicsBody->setVelocity({ physicsBody->getVelocity().x, 0.0f });
 		physicsBody->applyImpulse({ 0, jumpSpeed });
-		up = false;
+
+		if (contactsD.size() > 0)
+		{
+			up = false;
+			hasDoubleJump = true;
+		}
+		else
+		{
+			up = false;
+			hasDoubleJump = false;
+		}
 	}
 }
 

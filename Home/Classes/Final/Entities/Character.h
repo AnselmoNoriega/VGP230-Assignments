@@ -46,6 +46,7 @@ private:
 	bool up;
 	bool right;
 	bool left;
+	bool hasDoubleJump;
 
 	float timer;
 	const float spawnTime;

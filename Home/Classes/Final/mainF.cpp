@@ -32,10 +32,11 @@ bool MainF::init()
 
 	Vec2 midlePos = Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2);
 
-	InitWorld(midlePos);
-
 	auto level = TMXTiledMap::create("tmx/FirstLevel.tmx");
 	addChild(level, -1);
+
+	InitWorld(level);
+
 	level->getLayer("EnemySpawn")->setVisible(false);
 	level->getLayer("Exit")->setVisible(false);
 
@@ -95,12 +96,48 @@ void MainF::SetPhysicsMap(TMXTiledMap* map, std::string tileName)
 	}
 }
 
-void MainF::InitWorld(Vec2 midlePos)
+void MainF::SetEntityPos(cocos2d::TMXTiledMap* map, std::string tileName)
 {
-	player.SetSpawn(midlePos);
+	auto collisionFloor = map->getLayer(tileName);
+
+	for (int row = 0; row < map->getMapSize().height; ++row)
+	{
+		for (int col = 0; col < map->getMapSize().width; ++col)
+		{
+			auto tile = collisionFloor->getTileAt(cocos2d::Vec2(col, row));
+
+			if (tile)
+			{
+				enemies.push_back(std::make_unique<Enemy>((EnemyType)random<int>(1, 3), tile->getPosition(), 2.0f));
+			}
+		}
+	}
+}
+
+cocos2d::Vec2 MainF::LookForTile(cocos2d::TMXTiledMap* map, std::string tileName)
+{
+	auto collisionFloor = map->getLayer(tileName);
+
+	for (int row = 0; row < map->getMapSize().height; ++row)
+	{
+		for (int col = 0; col < map->getMapSize().width; ++col)
+		{
+			auto tile = collisionFloor->getTileAt(cocos2d::Vec2(col, row));
+
+			if (tile)
+			{
+				return tile->getPosition();
+			}
+		}
+	}
+}
+
+void MainF::InitWorld(cocos2d::TMXTiledMap* map)
+{
+	player.SetSpawn(LookForTile(map, "Spawn"));
 	player.Init(getPhysicsWorld(), _eventDispatcher, this);
 
-	enemies.push_back(std::make_unique<Enemy>(FLYING, midlePos, 2.0f));
+	SetEntityPos(map, "EnemySpawn");
 
 	for (auto& enemy : enemies)
 	{

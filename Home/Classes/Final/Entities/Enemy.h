@@ -7,8 +7,8 @@ enum EnemyType
 {
 	NONE,
 	FLYING,
-	GROUND,
-	OBSTACLE
+	OBSTACLE,
+	GROUND
 };
 
 class Enemy
@@ -37,6 +37,7 @@ private:
 	Vec2 speed;
 	Vec2 spawnPoint;
 	EnemyType myType;
+	std::string enemyName[4] = {"Enemy", "Enemy1", "Enemy2", "Enemy3"};
 
 	PhysicsBody* physicsBody;
 	Animation* anim;
