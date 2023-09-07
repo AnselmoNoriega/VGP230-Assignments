@@ -49,13 +49,16 @@ bool MainF::init()
 void MainF::update(float dt)
 {
 	player.Update(dt);
-	
+
 	for (auto& enemy : enemies)
 	{
 		enemy->Update(dt);
 	}
 
-	_defaultCamera->setPosition(player.Get()->getPosition());
+	if (player.Get()->isVisible())
+	{
+		_defaultCamera->setPosition(player.Get()->getPosition());
+	}
 }
 
 
@@ -83,7 +86,7 @@ void MainF::SetPhysicsMap(TMXTiledMap* map, std::string tileName)
 				auto physicsBody = cocos2d::PhysicsBody::createBox(tile->getContentSize(), PHYSICSSHAPE_MATERIAL_DEFAULT);
 				physicsBody->setDynamic(false);
 				physicsBody->setCategoryBitmask(2);
-				physicsBody->setCollisionBitmask(1); 
+				physicsBody->setCollisionBitmask(1);
 				physicsBody->setContactTestBitmask(1);
 				physicsBody->setName(tileName);
 				tile->setPhysicsBody(physicsBody);

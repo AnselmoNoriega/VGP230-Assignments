@@ -26,15 +26,23 @@ void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Sc
 void Character::Update(float dt)
 {
 	CharacterMovement();
+	auto t = sprite->getPositionY();
+
+	if (sprite->getPositionY() < spawnPoint.y -1000)
+	{
+		isWithEnemy = true;
+	}
 
 	if(isWithEnemy)
 	{
+		isTimeRunning = true;
 		deathExplotion->setPosition(sprite->getPosition());
 		deathExplotion->start();
 
 		sprite->setPosition(spawnPoint);
 		sprite->setVisible(false);
 
+		physicsBody->setVelocity({ 0.0f, 0.0f });
 		physicsWorld->setSpeed(0.0f);
 		isWithEnemy = false;
 	}
@@ -89,7 +97,6 @@ void Character::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene
 			if (other->getName() == "Enemy")
 			{
 				isWithEnemy = true; 
-				isTimeRunning = true;
 			}
 
 			return true;
