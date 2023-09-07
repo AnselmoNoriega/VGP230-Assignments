@@ -3,11 +3,18 @@
 
 using namespace cocos2d;
 
+enum EnemyType
+{
+	NONE,
+	FLYING,
+	GROUND
+};
+
 class Enemy
 {
 public:
 
-	Enemy(Vec2 SpawnPoint);
+	Enemy(EnemyType type, Vec2 SpawnPoint, float moveTime);
 
 	void Init(EventDispatcher* _eventDispatcher, Scene* scene);
 	void Update(float dt);
@@ -19,16 +26,21 @@ private:
 
 	void CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene);
 	void CharacterLogic(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene);
+	void MoveTimer(float dt);
 
 	void Animations(); 
 	static Vector<SpriteFrame*> GetAnimation(int count);
 
 	Sprite* sprite;
 	bool isFlipped;
-	float speed;
+	Vec2 speed;
 	Vec2 spawnPoint;
+	EnemyType myType;
 
 	PhysicsBody* physicsBody;
 	Animation* anim;
+
+	const float movementTime;
+	float timer;
 };
 

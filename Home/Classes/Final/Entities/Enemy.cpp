@@ -1,11 +1,12 @@
 #include "Enemy.h"
 
-Enemy::Enemy(Vec2 SpawnPoint) : speed(100.0f), isFlipped(false)
+Enemy::Enemy(EnemyType type, Vec2 SpawnPoint, float moveTime) : speed({ 100.0f, 0.0f }), isFlipped(false), movementTime(moveTime), timer(movementTime)
 {
 	Animations();
 	sprite = Sprite::create("Enemy/tile001.png");
 	sprite->setScale(2);
 	spawnPoint = SpawnPoint;
+	myType = type;
 }
 
 void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
@@ -20,7 +21,10 @@ void Enemy::Init(EventDispatcher* _eventDispatcher, Scene* scene)
 
 void Enemy::Update(float dt)
 {
-	physicsBody->setVelocity({ speed, physicsBody->getVelocity().y });
+	if (myType == GROUND) { speed.y = physicsBody->getVelocity().y; }
+	physicsBody->setVelocity(speed);
+
+	MoveTimer(dt);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -47,29 +51,22 @@ void Enemy::CharacterPhysics(EventDispatcher* _eventDispatcher, Scene* scene)
 	physicsBody->setCollisionBitmask(2);
 	physicsBody->setContactTestBitmask(1);//
 	sprite->setPhysicsBody(physicsBody);
-
-	auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = [=](PhysicsContact& contact) -> bool
-	{
-		auto a = contact.getShapeA()->getBody();
-		auto b = contact.getShapeB()->getBody();
-
-		auto other = physicsBody == a ? b : a;
-		auto t = other->getName();
-		if (other->getName() == "Wall")
-		{
-			speed *= -1;
-			sprite->setFlippedX(isFlipped = !isFlipped);
-		}
-
-		return true;
-	};
-
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, scene);
 }
 
 void Enemy::CharacterLogic(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene)
 {
+}
+
+void Enemy::MoveTimer(float dt)
+{
+	timer -= dt;
+
+	if (timer <= 0)
+	{
+		timer = movementTime;
+		speed *= -1;
+		sprite->setFlippedX(isFlipped = !isFlipped);
+	}
 }
 
 //----------------------------------------------------------------------------------------------------

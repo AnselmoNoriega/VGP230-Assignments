@@ -93,7 +93,8 @@ void MainF::InitWorld(Vec2 midlePos)
 	player.SetSpawn(midlePos);
 	player.Init(getPhysicsWorld(), _eventDispatcher, this);
 
-	enemies.push_back(std::make_unique<Enemy>(midlePos));
+	enemies.push_back(std::make_unique<Enemy>(FLYING, midlePos, 2.0f));
+
 	for (auto& enemy : enemies)
 	{
 		enemy->Init(_eventDispatcher, this);
