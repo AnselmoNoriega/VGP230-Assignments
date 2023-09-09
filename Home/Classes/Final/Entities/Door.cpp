@@ -1,14 +1,41 @@
 #include "Door.h"
+#include "Final/Menu.h"
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#include "json/document.h"
+#include "json/prettywriter.h"
+#include "json/stringbuffer.h"
+#pragma warning(pop)
+
+extern int levelsUnlucked;
+extern std::string mapNames[3];
+extern std::string mapName;
+
+Door::Door() : LevelComplete(false), timer(2.0f)
+{
+	sprite = Sprite::create("Trap/tile000.png");
+}
 
 void Door::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene)
 {
-	sprite = Sprite::create("Trap/tile000.png");
-
 	scene->addChild(sprite, 1);
 
 	ObjectPhysics(_eventDispatcher, scene);
+}
 
-	LevelComplete = false;
+void Door::Update(float dt)
+{
+	timer -= dt;
+	if (timer <= 0.0f)
+	{
+		if (levelsUnlucked == 3)
+		{
+			return;
+		}
+		mapName = mapNames[++levelsUnlucked];
+		Save();
+		Director::getInstance()->replaceScene(MainF::createScene());
+	}
 }
 
 void Door::SetSpawn(Vec2 pos)
@@ -24,6 +51,22 @@ bool Door::LevelIsComplete()
 void Door::LevelComplited()
 {
 	sprite->runAction(Repeat::create(Animate::create(Animation::createWithSpriteFrames(GetAnimation(6))), 1));
+}
+
+void Door::Save()
+{
+	rapidjson::Document document;
+	document.SetObject();
+
+	document.AddMember("levelsUnlucked", levelsUnlucked, document.GetAllocator());
+
+	rapidjson::StringBuffer buffer;
+	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+	document.Accept(writer);
+
+	std::string jsonStr = buffer.GetString();
+	auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename("Save.json");
+	cocos2d::FileUtils::getInstance()->writeStringToFile(jsonStr, fullPath);
 }
 
 void Door::ObjectPhysics(EventDispatcher* _eventDispatcher, Scene* scene)

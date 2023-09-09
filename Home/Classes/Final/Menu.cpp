@@ -1,6 +1,14 @@
 #include "Menu.h"
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#include "json/document.h"
+#include "json/prettywriter.h"
+#include "json/stringbuffer.h"
+#pragma warning(pop)
 
 std::string mapName;
+std::string mapNames[3] = { "TestLevel.tmx", "FirstLevel.tmx", "LastLevel.tmx" };
+int levelsUnlucked = 0;
 
 Scene* MainMenu::createScene()
 {
@@ -16,16 +24,17 @@ bool MainMenu::init()
 
 	InitBackground();
 
-	mapName = mapNames[levelsUnlucked];
-
 	auto newGame = MenuItemLabel::create(cocos2d::Label::createWithTTF("New Game", "fonts/Marker Felt.ttf", 24), [this](cocos2d::Ref* sender)
 		{
+			mapName = mapNames[levelsUnlucked];
 			Director::getInstance()->replaceScene(MainF::createScene());
 		});
 
 	auto loadButton = MenuItemLabel::create(cocos2d::Label::createWithTTF("Load", "fonts/Marker Felt.ttf", 24), [this](cocos2d::Ref* sender)
 		{
-			//load();
+			Load();
+			mapName = mapNames[levelsUnlucked];
+			Director::getInstance()->replaceScene(MainF::createScene());
 		});
 
 	auto quitButton = MenuItemLabel::create(cocos2d::Label::createWithTTF("Quit", "fonts/Marker Felt.ttf", 24), [this](cocos2d::Ref* sender)
@@ -90,5 +99,29 @@ void MainMenu::UpdateBackground(float dt)
 			background[i].at(j)->setPositionX(background[i].at(j)->getPositionX() + speed * dt);
 		}
 		speed *= 2;
+	}
+}
+
+void MainMenu::Load()
+{
+	std::string jsonString = cocos2d::FileUtils::getInstance()->getStringFromFile("Save.json");
+
+	if (jsonString != "")
+	{
+		rapidjson::Document document;
+		document.Parse(jsonString.c_str());
+
+		if (document.HasParseError())
+		{
+			std::stringstream ss;
+			ss << "Error parsing JSON: ErrorCode " << document.GetParseError();
+			std::string s = ss.str();
+			return;
+		}
+
+		if (document.HasMember("levelsUnlucked") && document["levelsUnlucked"].IsInt())
+		{
+			levelsUnlucked = document["levelsUnlucked"].GetFloat();
+		}
 	}
 }

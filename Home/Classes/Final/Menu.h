@@ -22,6 +22,7 @@ private:
 
 	void InitBackground();
 	void UpdateBackground(float dt);
+	void Load();
 
 	Vec2 midlePos;
 	Vec2 screenSize;
@@ -29,7 +30,4 @@ private:
 
 	Menu* menuController;
 	Vector<Sprite*> background[6];
-
-	std::string mapNames[3] = { "TestLevel.tmx", "FirstLevel.tmx", "LastLevel.tmx"};
-	int levelsUnlucked = 0;
 };

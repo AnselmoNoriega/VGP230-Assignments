@@ -65,6 +65,7 @@ void MainF::update(float dt)
 	if (exitDoor.LevelIsComplete())
 	{
 		player.PlayerWin();
+		exitDoor.Update(dt);
 	}
 }
 
