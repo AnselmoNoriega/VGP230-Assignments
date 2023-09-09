@@ -14,6 +14,7 @@ public:
 	Sprite* Get();
 	void MovePosition(Vec2 pos);
 	void SetSpawn(Vec2 pos);
+	void PlayerWin();
 
 private:
 	enum PlayerState
@@ -47,6 +48,7 @@ private:
 	bool right;
 	bool left;
 	bool hasDoubleJump;
+	bool canMove;
 
 	float timer;
 	const float spawnTime;

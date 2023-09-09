@@ -1,6 +1,6 @@
 #include "Character.h"
 
-Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(650), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(1.0f), hasDoubleJump(false)
+Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(650), up(false), left(false), right(false), boost(1.0f), isTimeRunning(false), spawnTime(1.0f), timer(1.0f), hasDoubleJump(false), canMove(true)
 {
 	Animations();
 	sprite = Sprite::create("Idle/tile001.png");
@@ -11,7 +11,7 @@ Character::Character() : physicsBody(nullptr), speed(0.0f), jumpSpeed(650), up(f
 
 void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Scene* scene)
 {
-	scene->addChild(sprite, 0);
+	scene->addChild(sprite, 2);
 
 	sprite->runAction(RepeatForever::create(Animate::create(anims.at(0))));
 	CharacterPhysics(_eventDispatcher, scene);
@@ -34,7 +34,7 @@ void Character::Update(float dt)
 		isWithEnemy = true;
 	}
 
-	if (isWithEnemy)
+	if (isWithEnemy && canMove)
 	{
 		isTimeRunning = true;
 		deathExplotion->setPosition(sprite->getPosition());
@@ -67,6 +67,11 @@ void Character::MovePosition(Vec2 pos)
 void Character::SetSpawn(Vec2 pos)
 {
 	spawnPoint = pos;
+}
+
+void Character::PlayerWin()
+{
+	canMove = false;
 }
 
 //-----------------------------------------------------------------------------------------------------
@@ -178,6 +183,12 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 
 void Character::CharacterMovement()
 {
+	if (!canMove)
+	{
+		physicsBody->setVelocity({ 0.0f, 0.0f });
+		return;
+	}
+
 	physicsBody->setVelocity({ speed * boost,physicsBody->getVelocity().y });
 
 	if (contactsD.size() == 0)

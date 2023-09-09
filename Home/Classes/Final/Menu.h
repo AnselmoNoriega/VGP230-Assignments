@@ -29,4 +29,7 @@ private:
 
 	Menu* menuController;
 	Vector<Sprite*> background[6];
+
+	std::string mapNames[3] = { "TestLevel.tmx", "FirstLevel.tmx", "LastLevel.tmx"};
+	int levelsUnlucked = 0;
 };

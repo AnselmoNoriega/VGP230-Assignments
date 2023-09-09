@@ -38,6 +38,7 @@ bool MainF::init()
 	InitWorld(level);
 
 	level->getLayer("EnemySpawn")->setVisible(false);
+	level->getLayer("Spawn")->setVisible(false);
 	level->getLayer("Exit")->setVisible(false);
 
 	SetPhysicsMap(level, "Collision");
@@ -59,6 +60,11 @@ void MainF::update(float dt)
 	if (player.Get()->isVisible())
 	{
 		_defaultCamera->setPosition(player.Get()->getPosition());
+	}
+
+	if (exitDoor.LevelIsComplete())
+	{
+		player.PlayerWin();
 	}
 }
 
@@ -136,6 +142,8 @@ void MainF::InitWorld(cocos2d::TMXTiledMap* map)
 {
 	player.SetSpawn(LookForTile(map, "Spawn"));
 	player.Init(getPhysicsWorld(), _eventDispatcher, this);
+	exitDoor.Init(getPhysicsWorld(), _eventDispatcher, this);
+	exitDoor.SetSpawn(LookForTile(map, "Exit"));
 
 	SetEntityPos(map, "EnemySpawn");
 

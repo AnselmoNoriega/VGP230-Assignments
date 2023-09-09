@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "Entities/Character.h"
 #include "Entities/Enemy.h"
+#include "Entities/Door.h"
 
 extern std::string mapName;
 
@@ -34,4 +35,6 @@ private:
 	Character player;
 	std::vector<std::unique_ptr<Enemy>> enemies;
 	std::vector<Vec2> enemyPositions;
+
+	Door exitDoor;
 };
