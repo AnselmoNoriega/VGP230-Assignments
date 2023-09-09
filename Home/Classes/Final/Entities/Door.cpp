@@ -28,7 +28,7 @@ void Door::Update(float dt)
 	timer -= dt;
 	if (timer <= 0.0f)
 	{
-		if (levelsUnlucked == 3)
+		if (levelsUnlucked == 2)
 		{
 			return;
 		}
