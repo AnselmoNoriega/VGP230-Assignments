@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "Menu.h"
 #include "Entities/Character.h"
 #include "Entities/Enemy.h"
 #include "Entities/Door.h"

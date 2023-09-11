@@ -36,6 +36,7 @@ void Character::Update(float dt)
 
 	if (isWithEnemy && canMove)
 	{
+		AudioEngine::play2d("sounds/kill.ogg");
 		isTimeRunning = true;
 		deathExplotion->setPosition(sprite->getPosition());
 		deathExplotion->setVisible(true);
@@ -208,6 +209,7 @@ void Character::CharacterMovement()
 
 	if (up)
 	{
+		AudioEngine::play2d("sounds/jump.ogg");
 		physicsBody->setVelocity({ physicsBody->getVelocity().x, 0.0f });
 		physicsBody->applyImpulse({ 0, jumpSpeed });
 

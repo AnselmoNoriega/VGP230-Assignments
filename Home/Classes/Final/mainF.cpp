@@ -51,6 +51,26 @@ bool MainF::init()
 		addChild(background[i], -2);
 	}
 
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event)
+		{
+			switch (keyCode)
+			{
+			case EventKeyboard::KeyCode::KEY_M:
+				Director::getInstance()->replaceScene(MainMenu::createScene());
+				break;
+
+			case EventKeyboard::KeyCode::KEY_V:
+				AudioEngine::pauseAll();
+				break;
+
+			case EventKeyboard::KeyCode::KEY_B:
+				AudioEngine::resumeAll();
+				break;
+			};
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
 	scheduleUpdate();
 
 	return true;

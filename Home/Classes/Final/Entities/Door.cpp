@@ -1,5 +1,6 @@
 #include "Door.h"
 #include "Final/Menu.h"
+#include "../VictoryScreen.h"
 #pragma warning(push)
 #pragma warning(disable: 4996)
 #include "json/document.h"
@@ -30,6 +31,7 @@ void Door::Update(float dt)
 	{
 		if (levelsUnlucked == 2)
 		{
+			Director::getInstance()->replaceScene(VictoryScene::createScene());
 			return;
 		}
  		mapName = mapNames[++levelsUnlucked];

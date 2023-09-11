@@ -1,6 +1,13 @@
 #pragma once
 #include "cocos2d.h"
 #include "mainF.h"
+#include "AudioEngine.h"
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#include "json/document.h"
+#include "json/prettywriter.h"
+#include "json/stringbuffer.h"
+#pragma warning(pop)
 
 using namespace cocos2d;
 

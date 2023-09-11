@@ -1,11 +1,4 @@
 #include "Menu.h"
-#include "AudioEngine.h"
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#include "json/document.h"
-#include "json/prettywriter.h"
-#include "json/stringbuffer.h"
-#pragma warning(pop)
 
 std::string mapName;
 std::string mapNames[3] = { "TestLevel.tmx", "FirstLevel.tmx", "LastLevel.tmx" };
@@ -49,6 +42,22 @@ bool MainMenu::init()
 	addChild(menuController, 0);
 
 	AudioEngine::play2d("sounds/ockaie_temple.ogg", true, 1.0f, nullptr);
+
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event)
+		{
+			switch (keyCode)
+			{
+			case EventKeyboard::KeyCode::KEY_V:
+				AudioEngine::pauseAll();
+				break;
+
+			case EventKeyboard::KeyCode::KEY_B:
+				AudioEngine::resumeAll();
+				break;
+			};
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
 	scheduleUpdate();
 
