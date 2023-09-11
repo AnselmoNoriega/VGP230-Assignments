@@ -27,6 +27,8 @@ private:
 	Vec2 screenSize;
 	Sprite* background[3];
 
+	bool musicOn = true;
+
 	void SetPhysicsMap(TMXTiledMap* map, std::string tileName);
 	void SetEntityPos(TMXTiledMap* map, std::string tileName);
 	Vec2 LookForTile(TMXTiledMap* map, std::string tileName);

@@ -49,15 +49,42 @@ bool MainMenu::init()
 			switch (keyCode)
 			{
 			case EventKeyboard::KeyCode::KEY_V:
-				AudioEngine::pauseAll();
-				break;
-
-			case EventKeyboard::KeyCode::KEY_B:
-				AudioEngine::resumeAll();
+				if (musicOn)
+				{
+					AudioEngine::pauseAll();
+					musicOn = false;
+				}
+				else
+				{
+					AudioEngine::resumeAll();
+					musicOn = true;
+				}
 				break;
 			};
 		};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
+	Controller::startDiscoveryController();
+	auto eventListenerController = EventListenerController::create();
+	eventListenerController->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, cocos2d::Event* evt)
+		{
+			switch (keyCode)
+			{
+			case 6:
+				if (musicOn)
+				{
+					AudioEngine::pauseAll();
+					musicOn = false;
+				}
+				else
+				{
+					AudioEngine::resumeAll();
+					musicOn = true;
+				}
+				break;
+			}
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerController, this);
 
 	scheduleUpdate();
 

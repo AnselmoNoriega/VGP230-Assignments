@@ -62,4 +62,5 @@ private:
 	Vector<Animation*> anims;
 
 	ParticleSystemQuad* deathExplotion;
+	int p = 0;
 };

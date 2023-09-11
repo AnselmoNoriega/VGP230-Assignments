@@ -37,4 +37,6 @@ private:
 
 	Menu* menuController;
 	Vector<Sprite*> background[6];
+
+	bool musicOn = true;
 };

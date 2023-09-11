@@ -26,6 +26,10 @@ void Character::Init(PhysicsWorld* pWorld, EventDispatcher* _eventDispatcher, Sc
 
 void Character::Update(float dt)
 {
+	if (p != 0)
+	{
+		p = 0;
+	}
 	CharacterMovement();
 	auto t = sprite->getPositionY();
 
@@ -178,8 +182,59 @@ void Character::CharacterController(PhysicsWorld* pWorld, EventDispatcher* _even
 			};
 		};
 
-
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, scene);
+
+	Controller::startDiscoveryController();
+	auto eventListenerController = EventListenerController::create();
+	eventListenerController->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, cocos2d::Event* evt)
+		{
+				p = keyCode;
+			
+			switch (keyCode)
+			{
+			case 0:
+				up = (contactsD.size() > 0 || hasDoubleJump);
+				break;
+			case 11:
+				right = true;
+				speed += 300.0f;
+				break;
+			case 13:
+				left = true;
+				speed -= 300.0f;
+				break;
+			case 1:
+				boost = 1.5f;
+				break;
+			case 3:
+				DebugDraw(pWorld);
+				break;
+			}
+		};
+	eventListenerController->onKeyUp = [=](cocos2d::Controller* controller, int keyCode, cocos2d::Event* evt)
+		{
+			p = keyCode;
+
+			switch (keyCode)
+			{
+			case 0:
+				up = false;
+				break;
+			case 11:
+				right = false;
+				speed -= 300.0f;
+				break;
+			case 13:
+				left = false;
+				speed += 300.0f;
+				break;
+			case 1:
+				boost = 1.0f;
+				break;
+			}
+		};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerController, scene);
 }
 
 void Character::CharacterMovement()
