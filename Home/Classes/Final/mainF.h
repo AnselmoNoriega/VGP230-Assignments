@@ -7,27 +7,28 @@
 
 extern std::string mapName;
 
-class MainF : public cocos2d::Scene
+class MainF : public Scene
 {
 public:
-	static cocos2d::Scene* createScene();
+	static Scene* createScene();
 
 	virtual bool init();
 	virtual void update(float dt);
 
 	// a selector callback
-	void menuCloseCallback(cocos2d::Ref* pSender);
+	void menuCloseCallback(Ref* pSender);
 
 	// implement the "static create()" method manually
 	CREATE_FUNC(MainF)
 
 private:
-	cocos2d::Vec2 origin;
-	cocos2d::Vec2 screenSize;
+	Vec2 origin;
+	Vec2 screenSize;
+	Sprite* background[3];
 
-	void SetPhysicsMap(cocos2d::TMXTiledMap* map, std::string tileName);
-	void SetEntityPos(cocos2d::TMXTiledMap* map, std::string tileName);
-	cocos2d::Vec2 LookForTile(cocos2d::TMXTiledMap* map, std::string tileName);
+	void SetPhysicsMap(TMXTiledMap* map, std::string tileName);
+	void SetEntityPos(TMXTiledMap* map, std::string tileName);
+	Vec2 LookForTile(TMXTiledMap* map, std::string tileName);
 
 	void InitWorld(cocos2d::TMXTiledMap* map);
 

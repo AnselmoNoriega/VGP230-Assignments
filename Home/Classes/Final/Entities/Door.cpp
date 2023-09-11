@@ -32,7 +32,7 @@ void Door::Update(float dt)
 		{
 			return;
 		}
-		mapName = mapNames[++levelsUnlucked];
+ 		mapName = mapNames[++levelsUnlucked];
 		Save();
 		Director::getInstance()->replaceScene(MainF::createScene());
 	}

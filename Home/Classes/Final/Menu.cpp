@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "AudioEngine.h"
 #pragma warning(push)
 #pragma warning(disable: 4996)
 #include "json/document.h"
@@ -46,6 +47,8 @@ bool MainMenu::init()
 	menuController->alignItemsVerticallyWithPadding(20);
 
 	addChild(menuController, 0);
+
+	AudioEngine::play2d("sounds/ockaie_temple.ogg", true, 1.0f, nullptr);
 
 	scheduleUpdate();
 

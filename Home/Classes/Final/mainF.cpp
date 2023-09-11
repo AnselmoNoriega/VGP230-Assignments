@@ -34,7 +34,6 @@ bool MainF::init()
 
 	auto level = TMXTiledMap::create("tmx/" + mapName);
 	addChild(level, -1);
-
 	InitWorld(level);
 
 	level->getLayer("EnemySpawn")->setVisible(false);
@@ -42,6 +41,15 @@ bool MainF::init()
 	level->getLayer("Exit")->setVisible(false);
 
 	SetPhysicsMap(level, "Collision");
+
+	background[0] = Sprite::create("Background/bg3.png");
+	background[1] = Sprite::create("Background/bg2.png");
+	background[2] = Sprite::create("Background/bg1.png");
+	for (int i = 0; i < 3; i++)
+	{
+		background[i]->setScale(screenSize.y / background[i]->getContentSize().height);
+		addChild(background[i], -2);
+	}
 
 	scheduleUpdate();
 
@@ -52,14 +60,19 @@ void MainF::update(float dt)
 {
 	player.Update(dt);
 
-	for (auto& enemy : enemies)
-	{
-		enemy->Update(dt);
-	}
-
 	if (player.Get()->isVisible())
 	{
 		_defaultCamera->setPosition(player.Get()->getPosition());
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		background[i]->setPosition(_defaultCamera->getPosition());
+	}
+
+	for (auto& enemy : enemies)
+	{
+		enemy->Update(dt);
 	}
 
 	if (exitDoor.LevelIsComplete())
