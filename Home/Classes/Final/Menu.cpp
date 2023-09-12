@@ -17,16 +17,16 @@ bool MainMenu::init()
 	midlePos = Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2);
 
 	InitBackground();
+	Load();
 
 	auto newGame = MenuItemLabel::create(cocos2d::Label::createWithTTF("New Game", "fonts/Marker Felt.ttf", 24), [this](cocos2d::Ref* sender)
 		{
-			mapName = mapNames[levelsUnlucked];
+			mapName = mapNames[0];
 			Director::getInstance()->replaceScene(MainF::createScene());
 		});
 
 	auto loadButton = MenuItemLabel::create(cocos2d::Label::createWithTTF("Load", "fonts/Marker Felt.ttf", 24), [this](cocos2d::Ref* sender)
 		{
-			Load();
 			mapName = mapNames[levelsUnlucked];
 			Director::getInstance()->replaceScene(MainF::createScene());
 		});
@@ -36,55 +36,18 @@ bool MainMenu::init()
 			Director::getInstance()->end();
 		});
 
-	menuController = Menu::create(newGame, loadButton, quitButton, nullptr);
+	menuController = Menu::create(newGame, quitButton, nullptr);
+	if (levelsUnlucked != 0)
+	{
+		menuController->addChild(loadButton);
+	}
 	menuController->alignItemsVerticallyWithPadding(20);
 
 	addChild(menuController, 0);
 
 	AudioEngine::play2d("sounds/ockaie_temple.ogg", true, 1.0f, nullptr);
 
-	auto keyboardListener = EventListenerKeyboard::create();
-	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event)
-		{
-			switch (keyCode)
-			{
-			case EventKeyboard::KeyCode::KEY_V:
-				if (musicOn)
-				{
-					AudioEngine::pauseAll();
-					musicOn = false;
-				}
-				else
-				{
-					AudioEngine::resumeAll();
-					musicOn = true;
-				}
-				break;
-			};
-		};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
-
-	Controller::startDiscoveryController();
-	auto eventListenerController = EventListenerController::create();
-	eventListenerController->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, cocos2d::Event* evt)
-		{
-			switch (keyCode)
-			{
-			case 6:
-				if (musicOn)
-				{
-					AudioEngine::pauseAll();
-					musicOn = false;
-				}
-				else
-				{
-					AudioEngine::resumeAll();
-					musicOn = true;
-				}
-				break;
-			}
-		};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerController, this);
+	Controllers();
 
 	scheduleUpdate();
 
@@ -163,4 +126,50 @@ void MainMenu::Load()
 			levelsUnlucked = document["levelsUnlucked"].GetFloat();
 		}
 	}
+}
+
+void MainMenu::Controllers()
+{
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event)
+		{
+			switch (keyCode)
+			{
+			case EventKeyboard::KeyCode::KEY_V:
+				if (musicOn)
+				{
+					AudioEngine::pauseAll();
+					musicOn = false;
+				}
+				else
+				{
+					AudioEngine::resumeAll();
+					musicOn = true;
+				}
+				break;
+			};
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
+	Controller::startDiscoveryController();
+	auto eventListenerController = EventListenerController::create();
+	eventListenerController->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, cocos2d::Event* evt)
+		{
+			switch (keyCode)
+			{
+			case 6:
+				if (musicOn)
+				{
+					AudioEngine::pauseAll();
+					musicOn = false;
+				}
+				else
+				{
+					AudioEngine::resumeAll();
+					musicOn = true;
+				}
+				break;
+			}
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerController, this);
 }

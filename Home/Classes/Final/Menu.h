@@ -30,6 +30,7 @@ private:
 	void InitBackground();
 	void UpdateBackground(float dt);
 	void Load();
+	void Controllers();
 
 	Vec2 midlePos;
 	Vec2 screenSize;

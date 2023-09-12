@@ -34,7 +34,20 @@ bool VictoryScene::init()
 				break;
 			};
 		};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this); Controller::startDiscoveryController();
+
+	auto eventListenerController = EventListenerController::create();
+	eventListenerController->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, cocos2d::Event* evt)
+		{
+			switch (keyCode)
+			{
+			case 7:
+				AudioEngine::stopAll();
+				Director::getInstance()->replaceScene(MainMenu::createScene());
+				break;
+			}
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListenerController, this);
 
 	scheduleUpdate();
 	return true;
